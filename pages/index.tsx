@@ -34,12 +34,6 @@ const Home: NextPage = () => {
   );
 };
 
-const checkIsGif = (image: string) => {
-  const dot = image.split(".");
-  const equal = image.split("=");
-  return equal[1] === "gif" || dot[dot.length - 1] === "gif";
-};
-
 const NftsComponent = () => {
   const { nfts, tokens } = useSolanaNfts();
   const { currentUser: user } = useTwitterUser();
@@ -54,22 +48,13 @@ const NftsComponent = () => {
             className="bg-gray-100 text-black dark:bg-nav-dark-500 dark:text-white rounded-lg px-5 py-3 flex flex-col justify-between"
           >
             <div className="mb-4 flex flex-col items-center">
-              {checkIsGif(nft.image) ? (
-                <img
-                  loading="lazy"
-                  className="max-h-80 min-h-[14rem] overflow-hidden rounded-lg h-full object-cover"
-                  src={nft.image}
-                  alt={nft.name}
-                />
-              ) : (
-                <NextImage
-                  className="max-h-72 min-h-[15rem] overflow-hidden rounded-lg h-full object-cover"
-                  src={nft.image}
-                  alt={nft.name}
-                  width={400}
-                  height={400}
-                />
-              )}
+              <NextImage
+                className="max-h-72 min-h-[15rem] overflow-hidden rounded-lg h-full object-cover"
+                src={nft.image}
+                alt={nft.name}
+                width={400}
+                height={400}
+              />
               <div className="flex gap-3 items-center mt-2">
                 <div className="rounded-full min-w-[6rem] w-1/2 h-2 border border-gray-300">
                   {/* <div className="w-1/2 h-full bg-green-400"></div> */}

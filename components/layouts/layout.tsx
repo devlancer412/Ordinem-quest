@@ -76,14 +76,14 @@ export const Layout: React.FC<Props> = ({ children }) => {
           <Sidenav />
           <Header />
           <div className="mx-2 md:mx-4 lg:ml-80 py-4 px-3 md:px-6">
-            <button
+            {/* <button
               onClick={async () => {
                 if (!wallet) return;
                 const sig = await sendTokensToUser(wallet, 50);
               }}
             >
               Sign transaction
-            </button>
+            </button> */}
             {children}
           </div>
         </div>

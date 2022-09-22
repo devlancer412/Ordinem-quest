@@ -41,7 +41,7 @@ export async function getRandomTweet(address: string, uid: string) {
       isYesterday(user.lastReplied.toDate()) ||
       differenceInDays(today, user.lastReplied.toDate()) > 0
     ) {
-      updateUser(user._id, {
+      updateUser(user?._id, {
         replyCount: 0,
       });
     } else {

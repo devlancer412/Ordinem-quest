@@ -1,5 +1,7 @@
 export const SOLANA_API_KEY = process.env.NEXT_PUBLIC_MORALIS_SOLANA_API_KEY;
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK ?? "devnet";
+export const rpcEndpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT ?? '';
+
 export const calculateLevels = (nftCount: number) => {
   switch (nftCount) {
     case 1:
