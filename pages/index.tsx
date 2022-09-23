@@ -57,6 +57,7 @@ const NftsComponent = () => {
                 width={400}
                 height={400}
               />
+
               <div className="flex gap-3 items-center mt-2">
                 <div className="rounded-full min-w-[6rem] w-1/2 h-2 border border-gray-300">
                   {/* <div className="w-1/2 h-full bg-green-400"></div> */}
