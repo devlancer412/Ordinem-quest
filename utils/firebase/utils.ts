@@ -72,17 +72,16 @@ export async function updateUserXP(amount: number) {
     await updateUser(user._id, {
       XP: increment(amount),
     });
-    await updateNfts();
     return;
   }
 
   const nft = nfts[selectedNft];
 
-  if (!nft.XP || Number(nft?.XP) + amount < 100) {
+  console.log(user.XP, amount)
+  if (!user.XP || Number(user?.XP) + amount < 100) {
     await updateUser(user._id, {
       XP: increment(amount),
     });
-    await updateNfts();
     return;
   }
 
@@ -98,8 +97,8 @@ export async function updateUserXP(amount: number) {
 export async function updateNfts() {
   const { nfts, setNfts } = useSolanaNfts.getState();
   const totalNfts = await getFirebaseNfts();
-  const updated = intersectionWith(totalNfts, nfts as Array<any>,(a:any, b:any) => a.mint == b.mint)
-  console.log(updated);
+  const updated = intersectionWith(totalNfts, nfts as Array<any>, (a: any, b: any) => a.mint == b.mint)
+  setNfts(updated.map((nft: any) => nft as NFT));
 }
 
 export async function getUserFromAddress(address: string) {
