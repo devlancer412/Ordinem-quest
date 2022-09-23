@@ -11,6 +11,8 @@ const Home: NextPage = () => {
   const { nfts } = useSolanaNfts();
   const wallet = useAnchorWallet();
 
+  console.log(nfts);
+
   const renderFullScreenMessage = (message: string) => (
     <div className="h-[80vh] w-full flex justify-center items-center text-center">
       <h5 className="text-3xl">{message}</h5>
@@ -55,6 +57,7 @@ const NftsComponent = () => {
                 width={400}
                 height={400}
               />
+
               <div className="flex gap-3 items-center mt-2">
                 <div className="rounded-full min-w-[6rem] w-1/2 h-2 border border-gray-300">
                   <div className={`h-full bg-green-400`} style={{width: `${(nft.XP ? nft.XP : 0) / (nft.level + 1)}%`}}></div>
@@ -93,7 +96,8 @@ const NftsComponent = () => {
               )}
               <h5 className="text-gray-500">
                 Tokens Earned:{" "}
-                <strong className="text-black dark:text-white">{tokens}</strong> Gold
+                <strong className="text-black dark:text-white">{tokens}</strong>{" "}
+                Gold
               </h5>
             </div>
 

@@ -1,5 +1,5 @@
-const path = require('path');
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const path = require("path");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: !!process.env.ANALYZE,
 });
 
@@ -7,8 +7,8 @@ module.exports = withBundleAnalyzer({
   webpack(
     config,
     {
-      dev = process.env.NODE_ENV === 'development',
-      isServer = typeof window === 'undefined',
+      dev = process.env.NODE_ENV === "development",
+      isServer = typeof window === "undefined",
     }
   ) {
     // if (isServer) {
@@ -19,9 +19,9 @@ module.exports = withBundleAnalyzer({
      * reduce page weight in production by ~10%
      */
     if (!dev && !isServer) {
-      Object.assign((config.resolve.alias['@/'] = path.resolve('./')), {
-        react: 'preact/compat',
-        'react-dom': 'preact/compat',
+      Object.assign((config.resolve.alias["@/"] = path.resolve("./")), {
+        react: "preact/compat",
+        "react-dom": "preact/compat",
       });
     }
     return config;
@@ -30,14 +30,14 @@ module.exports = withBundleAnalyzer({
     productionBrowserSourceMaps: true,
   },
   images: {
-    domains: ['ipfs.io', 'pbs.twimg.com'],
+    domains: ["ipfs.io", "pbs.twimg.com"],
   },
   future: {
     webpack5: true,
     strictPostcssConfiguration: true,
   },
   i18n: {
-    locales: ['en-US'],
-    defaultLocale: 'en-US',
+    locales: ["en-US"],
+    defaultLocale: "en-US",
   },
 });
