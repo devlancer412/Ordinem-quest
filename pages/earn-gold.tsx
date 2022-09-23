@@ -1,5 +1,6 @@
 import { Tab } from "@headlessui/react";
 import Follow from "components/earnGold/follow";
+import Knights from "components/earnGold/knights";
 import Tweet from "components/earnGold/tweet";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { useTwitterUser } from "hooks/useTwitterUser";
@@ -18,6 +19,10 @@ export default function EarnGold() {
     {
       title: "Tweet",
       component: <Tweet />,
+    },
+    {
+      title: "Select Knight",
+      component: <Knights />,
     },
   ];
   const { currentUser } = useTwitterUser();

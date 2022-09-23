@@ -4,6 +4,7 @@ type State = {
   nfts?: NFT[];
   allNfts?: NFT[];
   tokens: number;
+  selectedNft: number;
 };
 
 interface StateWithMutation extends State {
@@ -12,12 +13,14 @@ interface StateWithMutation extends State {
   searchNfts: (search: string) => void;
   setTwitterAccount: (payload: string, nftId: string) => void;
   setTokens: (amount: number) => void;
+  setSelected: (amount: number) => void;
 }
 
 export const useSolanaNfts = create<StateWithMutation>((set) => ({
   nfts: undefined,
   allNfts: undefined,
   tokens: 0,
+  selectedNft: 0,
   setNfts: (payload) => {
     set((state) => ({ ...state, nfts: payload, allNfts: payload }));
   },
@@ -36,8 +39,8 @@ export const useSolanaNfts = create<StateWithMutation>((set) => ({
       ...state,
       nfts: payload.length
         ? state.allNfts?.filter((nft) =>
-            nft.name.toLowerCase().includes(payload)
-          )
+          nft.name.toLowerCase().includes(payload)
+        )
         : state.allNfts,
     }));
   },
@@ -46,12 +49,15 @@ export const useSolanaNfts = create<StateWithMutation>((set) => ({
       const nfts = state.nfts?.map((nft) =>
         nft.mint === nftId
           ? {
-              ...nft,
-              twitter: payload,
-            }
+            ...nft,
+            twitter: payload,
+          }
           : nft
       );
       return { ...state, nfts };
     });
+  },
+  setSelected: (id) => {
+    set((state) => ({ ...state, selectedNft: id }));
   },
 }));

@@ -59,11 +59,13 @@ const Follow = () => {
           `/api/get-twitter-followers?user_id=${user.uid}`
         );
         const currentUserId = currentUser?.providerData[0]?.uid;
+        const followId = currentUserId?.length == 19 ? Math.floor(Number(currentUserId) / 100) * 100 : Number(currentUserId);
 
+        console.log(followId, result.data.data.ids);
         if (
           result.data.data &&
           result.data.data.ids &&
-          result.data.data.ids.includes(Number(currentUserId))
+          result.data.data.ids.includes(followId)
         ) {
           setIsVerified(true);
           updateUser(user._id, {
@@ -138,9 +140,8 @@ const Follow = () => {
           <a
             target="_blank"
             rel="noreferrer"
-            href={`https://twitter.com/intent/follow?screen_name=${
-              user.screen_name ?? user.screenName
-            }`}
+            href={`https://twitter.com/intent/follow?screen_name=${user.screen_name ?? user.screenName
+              }`}
             className="bg-blue-400 text-white px-5 py-2 rounded-lg"
           >
             Follow @{user.screen_name ?? user.screenName}
@@ -151,9 +152,8 @@ const Follow = () => {
           ) : (
             <button
               onClick={verifyUserFollow}
-              className={`bg-gray-50 text-blue-700 px-5 min-w-[5rem] py-2 rounded-lg duration-75 font-semibold ${
-                isVerifying && "opacity-60 pointer-events-none"
-              }`}
+              className={`bg-gray-50 text-blue-700 px-5 min-w-[5rem] py-2 rounded-lg duration-75 font-semibold ${isVerifying && "opacity-60 pointer-events-none"
+                }`}
             >
               {isVerifying ? <Spinner /> : "Verify follow"}
             </button>

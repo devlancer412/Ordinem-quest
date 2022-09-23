@@ -22,7 +22,6 @@ export async function getRandomUser(address: string, uid: string) {
   const level = calculateLevels(nfts.filter(nft => nft?.twitter === user.screenName).length ?? 1);
   const today = await getCurrentTime();
 
-  console.log(user)
   if (user.followCount >= level) {
     if (
       isYesterday(user.lastFollowed.toDate()) ||
