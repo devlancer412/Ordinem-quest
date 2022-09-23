@@ -2,13 +2,16 @@ import {
   doc,
   DocumentData,
   getDocs,
+  increment,
   query,
   QuerySnapshot,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { useAlert } from "hooks/useAlert";
+import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { useTwitterUser } from "hooks/useTwitterUser";
+import { intersectionWith } from "lodash";
 import { db, nftCollection, userCollection } from "./config";
 
 const { open: openAlert } = useAlert.getState();
@@ -18,7 +21,7 @@ export { openAlert, removeUser, changeUser };
 
 export const getData = (
   docs: QuerySnapshot<DocumentData>
-): { _id: string; [key: string]: any }[] =>
+): { _id: string;[key: string]: any }[] =>
   docs.docs.map((doc) => ({ ...doc.data(), _id: doc.id }));
 
 export async function getFirebaseNfts() {
@@ -61,8 +64,52 @@ export async function updateUserData(payload: any) {
   updateUser(user._id, payload);
 }
 
+export async function updateUserXP(amount: number) {
+  const user = await getCurrentUserData();
+  const { nfts, selectedNft } = useSolanaNfts.getState();
+
+  if (!nfts || !nfts.length) {
+    await updateUser(user._id, {
+      XP: increment(amount),
+    });
+    await updateNfts();
+    return;
+  }
+
+  const nft = nfts[selectedNft];
+
+  if (!nft.XP || Number(nft?.XP) + amount < 100) {
+    await updateUser(user._id, {
+      XP: increment(amount),
+    });
+    await updateNfts();
+    return;
+  }
+
+  updateUser(user._id, {
+    XP: increment(amount - 100),
+  });
+  updateNFT(nft._id, {
+    level: increment(1),
+  });
+  await updateNfts();
+}
+
+export async function updateNfts() {
+  const { nfts, setNfts } = useSolanaNfts.getState();
+  const totalNfts = await getFirebaseNfts();
+  const updated = intersectionWith(totalNfts, nfts as Array<any>,(a:any, b:any) => a.mint == b.mint)
+  console.log(updated);
+}
+
 export async function getUserFromAddress(address: string) {
   return getData(
     await getDocs(query(userCollection, where("wallet", "==", address)))
+  )[0];
+}
+
+export async function getNftFromMint(mint: string) {
+  return getData(
+    await getDocs(query(nftCollection, where("mint", "==", mint)))
   )[0];
 }

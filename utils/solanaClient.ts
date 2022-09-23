@@ -9,7 +9,7 @@ import {
   updateNFT,
 } from "utils/firebase";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
-import { differenceWith } from "lodash";
+import { differenceWith, intersectionWith } from "lodash";
 import { addDoc, deleteDoc, doc } from "firebase/firestore";
 
 const axiosInstance = axios.create({
@@ -26,7 +26,7 @@ const axiosInstance = axios.create({
 
 const { setTokens, setNfts } = useSolanaNfts.getState();
 
-export default class SolanaClient {
+export class SolanaClient {
   async getAllNfts(publicKey: string) {
     try {
       setNfts(null!);
@@ -55,20 +55,10 @@ export default class SolanaClient {
       );
 
       const nfts = await Promise.all(
-        nftTokens.map((nft: any) => this.getNftMetadata(nft.mint))
+        tokenDiff.map((nft: any) => this.getNftMetadata(nft.mint))
       );
 
       const ordinemNfts = nfts.filter((nft) => nft !== null);
-      const diff = differenceWith(
-        ordinemNfts,
-        firebaseNfts,
-        (i: any, o: any) => i.mint === o.mint
-      );
-
-      if(ordinemNfts && ordinemNfts.length) {
-        setNfts(ordinemNfts);
-      }
-      if (diff.length === 0) return;
 
       if (NETWORK === "mainnet") {
         // const user = await getUserFromAddress(publicKey);
@@ -78,22 +68,22 @@ export default class SolanaClient {
         //     nftCount: ordinemNfts.length,
         //   });
         // }
-        if (diff.length) {
-          diff.forEach(async (token) => {
-            await addDoc(nftCollection, {
-              ...token
-            });
+        for (const token of ordinemNfts) {
+          await addDoc(nftCollection, {
+            ...token
           });
-        }
+        };
       }
-      if (ordinemNfts.length) {
-        setNfts(ordinemNfts as any);
-      } else {
-        setNfts([]);
-      }
+
+      const updatedFirebaseNfts = await getFirebaseNfts();
+      const updatedNfts = intersectionWith(
+        updatedFirebaseNfts,
+        nftTokens,
+        (i: any, o: any) => i.mint === o.mint
+      );
+      setNfts(updatedNfts.map((nft: any) => nft as NFT));
     } catch (error) {
       console.log(error);
-
       throw error;
     }
   }
@@ -153,3 +143,5 @@ export default class SolanaClient {
     }
   }
 }
+
+export default new SolanaClient();

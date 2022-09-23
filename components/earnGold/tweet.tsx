@@ -8,6 +8,7 @@ import {
   fetchAndChangeTweet,
   getRandomTweet,
   updateUserData,
+  updateUserXP,
 } from "utils/firebase";
 import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
@@ -84,12 +85,12 @@ const Tweet = () => {
 
       if (result.data.data === true) {
         setIsVerified((state) => ({ ...state, like: true }));
-        updateUserData({
+        await updateUserData({
           likes: arrayUnion(tweet_id),
           likeCount: increment(1),
           lastLiked: serverTimestamp(),
-          XP: increment(50),
         });
+        await updateUserXP(50);
 
         sendTokens("like", 5);
       }
@@ -110,12 +111,12 @@ const Tweet = () => {
 
       if (result.data.data === true) {
         setIsVerified((state) => ({ ...state, comment: true }));
-        updateUserData({
+        await updateUserData({
           replies: arrayUnion(tweet_id),
           replyCount: increment(1),
           lastReplied: serverTimestamp(),
-          XP: increment(100),
         });
+        await updateUserXP(100);
 
         sendTokens("reply", 10);
       }
