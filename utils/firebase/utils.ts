@@ -64,31 +64,24 @@ export async function updateUserData(payload: any) {
   updateUser(user._id, payload);
 }
 
-export async function updateUserXP(amount: number) {
-  const user = await getCurrentUserData();
+export async function updateNftXP(amount: number) {
   const { nfts, selectedNft } = useSolanaNfts.getState();
 
   if (!nfts || !nfts.length) {
-    await updateUser(user._id, {
-      XP: increment(amount),
-    });
     return;
   }
 
   const nft = nfts[selectedNft];
 
-  console.log(user.XP, amount)
-  if (!user.XP || Number(user?.XP) + amount < 100) {
-    await updateUser(user._id, {
+  if (!nft.XP || Number(nft?.XP) + amount < (nft.level + 1) * 100) {
+    await updateNFT(nft._id, {
       XP: increment(amount),
     });
     return;
   }
 
-  updateUser(user._id, {
-    XP: increment(amount - 100),
-  });
   updateNFT(nft._id, {
+    XP: increment(amount),
     level: increment(1),
   });
   await updateNfts();

@@ -12,7 +12,7 @@ import {
   getRandomUser,
   updateUser,
   updateUserData,
-  updateUserXP,
+  updateNftXP,
 } from "utils/firebase";
 import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
@@ -76,7 +76,7 @@ const Follow = () => {
             followCount: increment(1),
             lastFollowed: serverTimestamp(),
           });
-          await updateUserXP(50);
+          await updateNftXP(50);
           const amount = await updateTokensToDB(
             wallet?.publicKey.toString() as string,
             5
