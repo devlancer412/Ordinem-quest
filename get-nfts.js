@@ -22,6 +22,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const userCollection = collection(db, "users");
+const nftCollection = collection(db, "nfts");
 
 const getData = (docs) =>
   docs.docs.map((doc) => ({ ...doc.data(), _id: doc.id }));
@@ -30,7 +31,10 @@ async function randomUserFunc() {
   const address = "5NJVqHANi3T2Fkk4VvnqSGthQTPc2juDv3vvpKULky5y";
   const uid = "1468617619062558720";
   let users = getData(
-    await getDocs(query(userCollection, where("wallet", "!=", address)))
+    await getDocs(query(userCollection))
+  );
+  let nfts = getData(
+    await getDocs(query(nftCollection))
   );
 
   let index = Math.ceil(Math.random() * users.length) - 1;
@@ -48,10 +52,7 @@ async function randomUserFunc() {
       console.log("includes id");
       continue;
     }
-    if (randomUser.hasNfts) {
-      hasNft = true;
-      break;
-    }
+    hasNft = nfts.filter(nft => nft.twitter == randomUser.screenName).length > 0;
   }
 
   console.log(randomUser);

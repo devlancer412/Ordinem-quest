@@ -1,21 +1,5 @@
 import create from "zustand";
 
-type Twitter = {
-  screenName: string;
-  displayName?: string;
-  image: string;
-};
-
-type NFT = {
-  name: string;
-  standard: string;
-  symbol: string;
-  image: string;
-  twitter?: Twitter;
-  mint?: string;
-  [key: string]: any;
-};
-
 type State = {
   nfts?: NFT[];
   allNfts?: NFT[];
@@ -26,7 +10,7 @@ interface StateWithMutation extends State {
   setNfts: (payload: NFT[]) => void;
   addNft: (payload: NFT) => void;
   searchNfts: (search: string) => void;
-  setTwitterAccount: (payload: Twitter, nftId: string) => void;
+  setTwitterAccount: (payload: string, nftId: string) => void;
   setTokens: (amount: number) => void;
 }
 

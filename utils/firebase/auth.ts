@@ -55,12 +55,10 @@ export async function signInWithTwitterFirebase(address?: string) {
         displayName,
         screenName: (user as any)?.reloadUserInfo.screenName,
         wallet: address ?? "",
-        hasNfts: false,
       });
     } else if (address != undefined) {
       const userDoc = docs.docs[0];
       const user = userDoc.data();
-      console.log(user);
 
       if (user.wallet.length === 0) {
         await updateUser(userDoc.id, {

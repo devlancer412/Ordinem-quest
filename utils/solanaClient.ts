@@ -6,6 +6,7 @@ import {
   getUserFromAddress,
   nftCollection,
   updateUser,
+  updateNFT,
 } from "utils/firebase";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { differenceWith } from "lodash";
@@ -29,23 +30,23 @@ export default class SolanaClient {
   async getAllNfts(publicKey: string) {
     try {
       setNfts(null!);
-      const firebaseNfts = await getFirebaseNfts(publicKey);
+      const firebaseNfts = await getFirebaseNfts();
 
       if (firebaseNfts && firebaseNfts.length) {
         setNfts(firebaseNfts as any);
       }
 
       const nftTokens = await this.getNftTokens(publicKey);
-      const deleteDiff = differenceWith(
-        firebaseNfts ?? [],
-        nftTokens,
-        (i: any, o: any) => i.mint === o.mint
-      );
-      if (deleteDiff.length) {
-        deleteDiff.forEach(async (token) => {
-          await deleteDoc(doc(db, "nfts", token._id));
-        });
-      }
+      // const deleteDiff = differenceWith(
+      //   firebaseNfts ?? [],
+      //   nftTokens,
+      //   (i: any, o: any) => i.mint === o.mint
+      // );
+      // if (deleteDiff.length) {
+      //   deleteDiff.forEach(async (token) => {
+      //     await deleteDoc(doc(db, "nfts", token._id));
+      //   });
+      // }
 
       const tokenDiff = differenceWith(
         nftTokens,
@@ -67,19 +68,19 @@ export default class SolanaClient {
       );
       if (diff.length === 0) return;
 
+      console.log(ordinemNfts, firebaseNfts, diff);
       if (NETWORK === "mainnet") {
-        const user = await getUserFromAddress(publicKey);
-        if (user) {
-          updateUser(user._id, {
-            hasNfts: ordinemNfts.length > 0,
-            nftCount: ordinemNfts.length,
-          });
-        }
+        // const user = await getUserFromAddress(publicKey);
+        // if (user) {
+        //   updateUser(user._id, {
+        //     hasNfts: ordinemNfts.length > 0,
+        //     nftCount: ordinemNfts.length,
+        //   });
+        // }
         if (diff.length) {
           diff.forEach(async (token) => {
             await addDoc(nftCollection, {
-              ...token,
-              wallet_address: publicKey,
+              ...token
             });
           });
         }
@@ -137,6 +138,17 @@ export default class SolanaClient {
     return {
       ...data,
       ...metadata,
+      level: 0,
     };
+  }
+
+  public async updateNFTOwner(nfts: NFT[], owner: string) {
+    for (const nft of nfts) {
+      if (nft._id) {
+        updateNFT(nft._id, {
+          twitter: owner,
+        });
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import SolanaClient from "utils/solanaClient";
 import { Header } from "../header/Header";
 import { Sidenav } from "../sidenav/Sidenav";
@@ -10,6 +10,7 @@ import Alert from "components/Alert";
 import Notification from "components/Notification";
 import { useWindowSize } from "hooks/useWindowSize";
 import { sendTokensToUser } from "utils/token";
+import { useSolanaNfts } from "hooks/useSolanaNfts";
 
 interface Props {
   children: React.ReactNode;
@@ -17,9 +18,21 @@ interface Props {
 
 export const Layout: React.FC<Props> = ({ children }) => {
   const wallet = useWallet();
-  const { login, logout, changeUser, getDataFromStorage } = useTwitterUser();
+  const { login, logout, changeUser, getDataFromStorage, currentUser } = useTwitterUser();
   const { setSize } = useWindowSize();
+  const { nfts } = useSolanaNfts();
   const auth = getAuth();
+  const [updateOwnershipFlage, setUpdateOwnershipFlag] = useState<boolean>(true);
+  const solanaClient = new SolanaClient();
+
+  useEffect(() => {
+    if (nfts && nfts.length && updateOwnershipFlage && currentUser) {
+      (async () => {
+        await solanaClient.updateNFTOwner(nfts, currentUser.screenName as string);
+        setUpdateOwnershipFlag(false);
+      })();
+    }
+  }, [nfts, updateOwnershipFlage, currentUser]);
 
   useEffect(() => {
     if (wallet && wallet.publicKey) {
@@ -33,10 +46,9 @@ export const Layout: React.FC<Props> = ({ children }) => {
           changeUser(user.screenName);
         }
 
-        const solanaClient = new SolanaClient();
-        await solanaClient.getGoldTokens(publicKey);
-
+        await solanaClient.getGoldTokens(publicKey)
         await solanaClient.getAllNfts(publicKey);
+        setUpdateOwnershipFlag(true);
       })();
     }
   }, [wallet]);
@@ -45,6 +57,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
     auth.onAuthStateChanged(async (observer) => {
       if (observer !== null) {
         login(observer);
+        setUpdateOwnershipFlag(true);
       }
       // else {
       //   logout();
@@ -64,7 +77,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
     window.addEventListener("resize", windowListener);
     getDataFromStorage();
 
-    return () => window.removeEventListener("resize", () => {});
+    return () => window.removeEventListener("resize", () => { });
   }, []);
 
   try {

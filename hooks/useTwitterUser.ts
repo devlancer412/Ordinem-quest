@@ -2,14 +2,6 @@ import axios from "axios";
 import { getAuth, User } from "firebase/auth";
 import create from "zustand";
 
-type UserType = User & {
-  screenName?: string;
-  followers?: number | string;
-  following?: number | string;
-  wallet?: string;
-  profile_image?: string;
-};
-
 type State = {
   users: UserType[] | null;
   currentUser: UserType | null;

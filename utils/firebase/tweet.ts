@@ -68,10 +68,18 @@ export async function getRandomTweet(address: string, uid: string) {
 
   let users = getData(
     await getDocs(query(userCollection, where("wallet", "!=", address)))
+    // await getDocs(query(userCollection))
   );
-  users = users.filter((user) => user.hasNfts);
+  let nfts = getData(
+    await getDocs(query(userCollection))
+  );
+  users = users.filter((user) => nfts.filter((nft) => nft.twitter == user.screenName).length);
 
   let tweet = null;
+
+  if(!users.length) {
+    return;
+  }
 
   while (!tweet) {
     let index = Math.ceil(Math.random() * users.length) - 1;

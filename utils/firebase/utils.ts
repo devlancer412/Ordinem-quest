@@ -21,10 +21,10 @@ export const getData = (
 ): { _id: string; [key: string]: any }[] =>
   docs.docs.map((doc) => ({ ...doc.data(), _id: doc.id }));
 
-export async function getFirebaseNfts(publicKey: string) {
+export async function getFirebaseNfts() {
   return getData(
     await getDocs(
-      query(nftCollection, where("wallet_address", "==", publicKey))
+      query(nftCollection)
     )
   );
 }
@@ -49,6 +49,10 @@ export async function getCurrentUserData(uid?: string) {
 
 export async function updateUser(userId: string, payload: any) {
   await updateDoc(doc(db, "users", userId), payload);
+}
+
+export async function updateNFT(nftId: string, payload: any) {
+  await updateDoc(doc(db, "nfts", nftId), payload);
 }
 
 export async function updateUserData(payload: any) {

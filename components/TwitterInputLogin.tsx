@@ -72,7 +72,7 @@ const TwitterInputLogin = () => {
         displayName,
         screenName,
         wallet: address ?? "",
-        hasNfts: false,
+        XP: 0,
       });
     }
 

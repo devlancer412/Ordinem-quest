@@ -4,7 +4,7 @@ import { getDocs, query, where } from "firebase/firestore";
 import { useAlert } from "hooks/useAlert";
 import { useQuests } from "hooks/useQuests";
 import { calculateLevels, getCurrentTime } from "utils/constants";
-import { userCollection } from "./config";
+import { nftCollection, userCollection } from "./config";
 import { getCurrentUserData, getCurrentUserId, getData, updateUser } from "./utils";
 
 const { setUsersToFollow, setEndedQuotas } = useQuests.getState();
@@ -15,9 +15,14 @@ export async function getRandomUser(address: string, uid: string) {
   const user = getData(
     await getDocs(query(userCollection, where("wallet", "==", address)))
   )[0];
-  const level = calculateLevels(user.nftCount ?? 1);
+  let nfts = getData(
+    await getDocs(query(nftCollection))
+  );
+  
+  const level = calculateLevels(nfts.filter(nft => nft?.twitter === user.screenName).length ?? 1);
   const today = await getCurrentTime();
 
+  console.log(user)
   if (user.followCount >= level) {
     if (
       isYesterday(user.lastFollowed.toDate()) ||
@@ -41,19 +46,27 @@ export async function getRandomUser(address: string, uid: string) {
 
   let users = getData(
     await getDocs(query(userCollection, where("wallet", "!=", address)))
+    // await getDocs(query(userCollection))
   );
   users = users.filter((user) => {
     let isFollower = false;
     if (user.followers) {
       isFollower = user.followers.includes(uid);
     }
-    return user.hasNfts && !isFollower;
+    let hasNfts = nfts.filter(nft => nft?.twitter === user.screenName).length > 0;
+
+    return hasNfts && !isFollower;
   });
+
+  if(users.length == 0) {
+    return;
+  }
 
   let index = Math.ceil(Math.random() * users.length) - 1;
   users = [...users.splice(index, 1), ...users];
+
   const result = await axios.get(
-    `/api/get-twitter-data?user_id=${users[0].uid}`
+    `/api/get-twitter-data?user_id=${users[0]?.uid}`
   );
   users[0] = { ...users[0], ...result.data.data };
 

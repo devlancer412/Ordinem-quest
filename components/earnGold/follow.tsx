@@ -38,7 +38,7 @@ const Follow = () => {
     try {
       await getRandomUser(
         wallet?.publicKey.toString(),
-        currentUser?.providerData[0].uid
+        currentUser?.providerData[0]?.uid
       );
     } catch (error) {
       console.log(error);
@@ -58,7 +58,7 @@ const Follow = () => {
         const result = await axios.get(
           `/api/get-twitter-followers?user_id=${user.uid}`
         );
-        const currentUserId = currentUser?.providerData[0].uid;
+        const currentUserId = currentUser?.providerData[0]?.uid;
 
         if (
           result.data.data &&
@@ -72,6 +72,7 @@ const Follow = () => {
           updateUserData({
             followCount: increment(1),
             lastFollowed: serverTimestamp(),
+            XP: increment(50),
           });
           const amount = await updateTokensToDB(
             wallet?.publicKey.toString() as string,

@@ -52,7 +52,7 @@ const Tweet = () => {
         try {
           await getRandomTweet(
             wallet?.publicKey.toString(),
-            currentUser?.providerData[0].uid
+            currentUser?.providerData[0]?.uid
           );
         } catch (error) {
           console.log(error);
@@ -88,6 +88,7 @@ const Tweet = () => {
           likes: arrayUnion(tweet_id),
           likeCount: increment(1),
           lastLiked: serverTimestamp(),
+          XP: increment(50),
         });
 
         sendTokens("like", 5);
@@ -113,6 +114,7 @@ const Tweet = () => {
           replies: arrayUnion(tweet_id),
           replyCount: increment(1),
           lastReplied: serverTimestamp(),
+          XP: increment(100),
         });
 
         sendTokens("reply", 10);
