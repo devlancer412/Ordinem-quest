@@ -9,7 +9,7 @@ import {
   openAlert,
   updateUser,
 } from "./utils";
-import { userCollection } from "./config";
+import { nftCollection, userCollection } from "./config";
 import { useQuests } from "hooks/useQuests";
 
 const { setEndedQuotas, setOrdinemUsers, setTweet } = useQuests.getState();
@@ -21,7 +21,11 @@ export async function getRandomTweet(address: string, uid: string) {
   const user = getData(
     await getDocs(query(userCollection, where("wallet", "==", address)))
   )[0];
-  const level = calculateLevels(user.nftCount ?? 1);
+  let nfts = getData(
+    await getDocs(query(nftCollection))
+  );
+  
+  const level = calculateLevels(nfts.filter(nft => nft?.twitter === user.screenName).length ?? 1);
   const today = await getCurrentTime();
 
   if (user.likeCount >= level) {
@@ -70,9 +74,7 @@ export async function getRandomTweet(address: string, uid: string) {
     await getDocs(query(userCollection, where("wallet", "!=", address)))
     // await getDocs(query(userCollection))
   );
-  let nfts = getData(
-    await getDocs(query(userCollection))
-  );
+  
   users = users.filter((user) => nfts.filter((nft) => nft.twitter == user.screenName).length);
 
   let tweet = null;

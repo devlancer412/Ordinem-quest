@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import {
   fetchAndChangeTweet,
   getRandomTweet,
+  updateNftXP,
   updateUserData,
-  updateUserXP,
 } from "utils/firebase";
 import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
@@ -83,6 +83,8 @@ const Tweet = () => {
         `/api/verify-like?user_id=${currentUserId}&tweet_id=${tweet_id}`
       );
 
+      console.log(result.data.data);
+
       if (result.data.data === true) {
         setIsVerified((state) => ({ ...state, like: true }));
         await updateUserData({
@@ -90,7 +92,7 @@ const Tweet = () => {
           likeCount: increment(1),
           lastLiked: serverTimestamp(),
         });
-        await updateUserXP(50);
+        await updateNftXP(50);
 
         sendTokens("like", 5);
       }
@@ -116,7 +118,7 @@ const Tweet = () => {
           replyCount: increment(1),
           lastReplied: serverTimestamp(),
         });
-        await updateUserXP(100);
+        await updateNftXP(100);
 
         sendTokens("reply", 10);
       }
