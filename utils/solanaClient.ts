@@ -32,9 +32,9 @@ export default class SolanaClient {
       setNfts(null!);
       const firebaseNfts = await getFirebaseNfts();
 
-      if (firebaseNfts && firebaseNfts.length) {
-        setNfts(firebaseNfts as any);
-      }
+      // if (firebaseNfts && firebaseNfts.length) {
+      //   setNfts(firebaseNfts as any);
+      // }
 
       const nftTokens = await this.getNftTokens(publicKey);
       // const deleteDiff = differenceWith(
@@ -54,8 +54,6 @@ export default class SolanaClient {
         (i: any, o: any) => i.mint === o.mint
       );
 
-      if (tokenDiff.length === 0) return;
-
       const nfts = await Promise.all(
         nftTokens.map((nft: any) => this.getNftMetadata(nft.mint))
       );
@@ -66,9 +64,12 @@ export default class SolanaClient {
         firebaseNfts,
         (i: any, o: any) => i.mint === o.mint
       );
+
+      if(ordinemNfts && ordinemNfts.length) {
+        setNfts(ordinemNfts);
+      }
       if (diff.length === 0) return;
 
-      console.log(ordinemNfts, firebaseNfts, diff);
       if (NETWORK === "mainnet") {
         // const user = await getUserFromAddress(publicKey);
         // if (user) {
