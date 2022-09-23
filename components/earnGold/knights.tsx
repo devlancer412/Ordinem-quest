@@ -23,7 +23,7 @@ const Knights = () => {
                             />
                             <div className="flex gap-2 items-center mt-2 px-[5px]">
                                 <div className="rounded-full min-w-[4rem] w-1/2 h-2 border border-gray-300">
-                                    <div className={`!w-[${(nft.level ? nft.level : 0) * 100 / 2222}%] h-full bg-green-400`} />
+                                    <div className={`h-full bg-green-400`} style={{width: `${(nft.level ? nft.level : 0) * 100 / 2222}%`}}></div>
                                 </div>
                                 <h5 className="text-gray-500 text-[10px]">
                                     Level{" "}
