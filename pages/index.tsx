@@ -11,6 +11,8 @@ const Home: NextPage = () => {
   const { nfts } = useSolanaNfts();
   const wallet = useAnchorWallet();
 
+  console.log(nfts);
+
   const renderFullScreenMessage = (message: string) => (
     <div className="h-[80vh] w-full flex justify-center items-center text-center">
       <h5 className="text-3xl">{message}</h5>
@@ -93,7 +95,8 @@ const NftsComponent = () => {
               )}
               <h5 className="text-gray-500">
                 Tokens Earned:{" "}
-                <strong className="text-black dark:text-white">{tokens}</strong> Gold
+                <strong className="text-black dark:text-white">{tokens}</strong>{" "}
+                Gold
               </h5>
             </div>
 

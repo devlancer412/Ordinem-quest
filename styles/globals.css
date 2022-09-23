@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  .main {
+    @apply lg:ml-80 
+  }
+
   .full-body {
-    @apply h-screen w-screen bg-gradient-to-br from-light-background-400 to-light-background-800 dark:from-[#DD0E23] dark:to-[#270318];
+    @apply lg:ml-80 h-screen w-screen lg:w-[calc(100vw-20rem)] bg-[url('/knight-bg.png')] bg-cover;
   }
 
   .swv-dropdown {

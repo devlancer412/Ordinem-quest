@@ -87,17 +87,9 @@ export const Layout: React.FC<Props> = ({ children }) => {
           <Alert />
           <Notification />
           <Sidenav />
-          <Header />
-          <div className="mx-2 md:mx-4 lg:ml-80 py-4 px-3 md:px-6">
-            {/* <button
-              onClick={async () => {
-                if (!wallet) return;
-                const sig = await sendTokensToUser(wallet, 50);
-              }}
-            >
-              Sign transaction
-            </button> */}
-            {children}
+          <div className="main">
+            <Header />
+            <div className="mx-2 md:mx-4 py-4 px-3 md:px-6">{children}</div>
           </div>
         </div>
       </>

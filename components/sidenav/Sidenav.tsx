@@ -7,6 +7,7 @@ import { ArrowRight } from "../../icons/arrowRight";
 import { Moon } from "../../icons/moon";
 import { useTheme } from "next-themes";
 import { Sun } from "../../icons/sun";
+import { DarkMode } from "../../icons/darkMode";
 import { useState, useEffect } from "react";
 import { useTwitterUser } from "hooks/useTwitterUser";
 import SignInWithTwitter from "components/buttons/SignInWithTwitter";
@@ -29,29 +30,53 @@ export const Sidenav = () => {
     if (!mounted) return null;
     const currentTheme = theme === "system" ? systemTheme : theme;
 
-    if (currentTheme === "dark") {
-      return (
-        <button onClick={() => setTheme("light")}>
-          <div className="flex justify-between px-4 py-2 transition-all duration-200 w-80 hover:bg-primary-500 hover:text-white dark:text-dark-text-500 hover:dark:text-white group">
-            <span className="text-base">Light Mode</span>
-            <span className="mr-2">
-              <Sun />
+    // if (currentTheme === "dark") {
+    return (
+      <div>
+        <div className="flex justify-between px-4 py-2 group items-center">
+          <div className="flex items-center gap-3 py-2">
+            <DarkMode />
+            <span className="ml-2 text-base dark:text-dark-text-500">
+              {currentTheme == "dark" ? "Dark Mode" : "Light Mode"}
             </span>
           </div>
-        </button>
-      );
-    } else {
-      return (
-        <button onClick={() => setTheme("dark")}>
-          <div className="flex justify-between px-4 py-2 transition-all duration-200 w-80 hover:bg-primary-500 hover:text-white dark:text-dark-text-500">
-            <span className="text-base">Dark Mode</span>
-            <span className="mr-2">
+          <div className="flex justify-center p-2 bg-slate-100 rounded-full">
+            <div
+              className={
+                (currentTheme == "light"
+                  ? "bg-white text-[#5429FF]"
+                  : "bg-slate-100 text-[#9E9CA4]") + " mr-2 rounded-full  p-2"
+              }
+              onClick={() => setTheme("light")}
+            >
+              <Sun fill={currentTheme == "light" ? "fill-[#5429FF]" : ""} />
+            </div>
+            <div
+              className={
+                (currentTheme == "dark"
+                  ? "bg-white text-[#5429FF]"
+                  : "bg-slate-100 text-[#9E9CA4]") + " rounded-full  p-2"
+              }
+              onClick={() => setTheme("dark")}
+            >
               <Moon />
-            </span>
+            </div>
           </div>
-        </button>
-      );
-    }
+        </div>
+      </div>
+    );
+    // } else {
+    //   return (
+    //     <button onClick={() => setTheme("dark")}>
+    //       <div className="flex justify-between px-4 py-2 transition-all duration-200 w-80 hover:bg-primary-500 hover:text-white dark:text-dark-text-500">
+    //         <span className="text-base">Dark Mode</span>
+    //         <span className="mr-2">
+    //           <Moon />
+    //         </span>
+    //       </div>
+    //     </button>
+    //   );
+    // }
   };
 
   return (
@@ -72,7 +97,7 @@ export const Sidenav = () => {
       >
         <Link className="" href={"/"}>
           <a className="flex items-center py-4">
-            <Image src="/logo.png" width="40px" height="40px" alt="logo" />
+            <Image src="/logo.png" width="90px" height="90px" alt="logo" />
             <div>
               <span className="text-xl font-bold text-black dark:text-white">
                 Ordinem

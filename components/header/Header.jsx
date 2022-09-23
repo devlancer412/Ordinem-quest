@@ -4,6 +4,7 @@ import { useSolanaNfts } from "hooks/useSolanaNfts";
 import Link from "next/link";
 import { useState } from "react";
 import { Hamburger } from "../../icons/hamburger";
+import { Bell } from "../../icons/bell";
 import { ConnectWallet } from "../connectWallet/connectWallet";
 
 export const Header = () => {
@@ -17,7 +18,7 @@ export const Header = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between w-full px-3 md:px-6 py-4 ml-0 bg-white shadow-lg lg:justify-end dark:bg-nav-dark-500">
+      <div className="flex items-center justify-between w-full px-3 md:px-6 py-4 ml-0  lg:justify-end dark:bg-nav-dark-500 lg:dark:bg-transparent bg-white lg:bg-transparent items-center">
         <div className="flex mr-4 lg:hidden">
           <button onClick={() => setSideNav()} className="block lg:hidden">
             <Hamburger />
@@ -37,12 +38,14 @@ export const Header = () => {
             </Link>
           </div>
         </div>
-        <div className="flex justify-end md:justify-between w-full lg:ml-80">
-          <div className="hidden md:block">
+        <div className="flex justify-end lg:justify-between w-full">
+          <div className="hidden lg:block">
             <SearchComponent />
           </div>
           <div className="flex items-center gap-3">
-            <WalletMultiButton className="text-sm rounded-full bg-primary-500 hover:bg-primary-900 h-10 px-4" />
+            <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold">Withdraw Gold</button>
+            <WalletMultiButton className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:!bg-[#b30000] hover:text-white h-10 px-4 font-bold"></WalletMultiButton>
+            <button className="rounded-full bg-[#F1F1F1] text-[#7A797D] hover:bg-primary-900 h-10 px-2"><Bell /></button>
             {/* <div className="bg-white w-10 h-10 rounded-full flex justify-center items-center">
               <svg
                 className="w-6 h-6 text-dark-text-700"
@@ -63,7 +66,7 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="md:hidden py-4 px-3">
+      <div className="lg:hidden py-4 px-3">
         <SearchComponent />
       </div>
 
@@ -82,14 +85,14 @@ const SearchComponent = () => {
   const { searchNfts } = useSolanaNfts();
 
   return (
-    <div className="flex items-center rounded-full px-5 py-2 gap-2 bg-gray-100 text-gray-700">
+    <div className="flex items-center rounded-full px-5 py-3 gap-2 bg-gray-100 text-gray-700 dark:bg-[#4D3A3A]">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 h-6"
+        className="w-6 h-6 text-dark-text-500"
       >
         <path
           strokeLinecap="round"
@@ -100,7 +103,7 @@ const SearchComponent = () => {
 
       <input
         type="text"
-        className="bg-transparent min-w-[12rem] outline-none"
+        className="bg-transparent min-w-[12rem] outline-none text-[#B9B8BC] w-80"
         placeholder="Search NFT’s using name"
         onChange={(e) => {
           clearTimeout(debounced);
