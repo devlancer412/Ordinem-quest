@@ -41,24 +41,24 @@ const NftsComponent = () => {
   const { currentUser: user } = useTwitterUser();
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-5 justify-items-center">
       {nfts &&
         nfts.length > 0 &&
         nfts.map((nft, i) => (
           <div
             key={i}
-            className="bg-gray-100 text-black dark:bg-nav-dark-500 dark:text-white rounded-lg px-5 py-3 flex flex-col justify-between"
+            className="bg-white text-black dark:bg-[#262121ad] dark:text-white rounded-lg px-5 py-3 flex flex-col justify-between max-w-[25rem]"
           >
-            <div className="mb-4 flex flex-col items-center">
+            <div className="mb-4 flex flex-col px-4 py-2">
               <NextImage
-                className="max-h-72 min-h-[15rem] overflow-hidden rounded-lg h-full object-cover"
+                className="overflow-hidden rounded-lg"
                 src={nft.image}
                 alt={nft.name}
                 width={400}
                 height={400}
               />
 
-              <div className="flex gap-3 items-center mt-2">
+              <div className="flex gap-3 items-center mt-2 justify-center">
                 <div className="rounded-full min-w-[6rem] w-1/2 h-2 border border-gray-300">
                   {/* <div className="w-1/2 h-full bg-green-400"></div> */}
                 </div>
@@ -69,7 +69,7 @@ const NftsComponent = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-2xl">{nft.name}</h3>
+              <h3 className="text-xl">{nft.name}</h3>
 
               {user && (
                 <div className="flex gap-1 mt-1 mb-3 items-center text-gray-500">
@@ -94,7 +94,7 @@ const NftsComponent = () => {
                   )}
                 </div>
               )}
-              <h5 className="text-gray-500">
+              <h5 className="text-white">
                 Tokens Earned:{" "}
                 <strong className="text-black dark:text-white">{tokens}</strong>{" "}
                 Gold
