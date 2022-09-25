@@ -96,8 +96,8 @@ export class SolanaClient {
 
   async getGoldTokens(publicKey: string) {
     const user = await getUserFromAddress(publicKey);
-    if (user && user.tokensEarned) {
-      setTokens(user.tokensEarned);
+    if (user && user.tokensWithdrawable) {
+      setTokens(user.tokensWithdrawable);
       return;
     }
 
