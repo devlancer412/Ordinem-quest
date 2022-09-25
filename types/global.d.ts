@@ -1,4 +1,5 @@
 import { User } from "firebase/auth";
+import { Deadlines } from "utils/constants";
 export { }
 
 declare global {
@@ -18,4 +19,16 @@ declare global {
         mint?: string;
         [key: string]: any;
     };
+
+    type Deadline = typeof Deadlines[number];
+
+    type Quest = {
+        title: string;
+        description: string;
+        deadline: Deadline;
+        link: string;
+        rewardAmount: number;
+        createdTime?: string;
+        [key: string]: any;
+    }
 }
