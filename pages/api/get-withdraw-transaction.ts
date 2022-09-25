@@ -36,10 +36,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return;
         }
 
-        updateUser(user._id, {
-            tokensWithdrawable: 0,
-        })
-        
         const connection = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
 
         const mintAddress = new PublicKey(process.env.NEXT_PUBLIC_MINT_TOKEN_ADDRESS as string);
@@ -107,6 +103,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             data: serializedTransaction.toString("base64"),
         });
 
+        updateUser(user._id, {
+            tokensWithdrawable: 0,
+        })
+        
         return;
 
     } catch (error: any) {
