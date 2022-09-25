@@ -32,8 +32,9 @@ export const Header = () => {
       `/api/get-withdraw-transaction?user_wallet=${publicKey.toBase58()}`
     );
 
+    console.log(response.data)
     if (response.data.status != 'ok') {
-      console.log("sth went wrong on server");
+      console.log(response.data.error);
       return;
     }
 

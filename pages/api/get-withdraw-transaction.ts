@@ -26,9 +26,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         const user = await getUserFromAddress(user_wallet);
-        updateUser(user._id, {
-            tokensWithdrawable: 0,
-        })
 
         if (!user.tokensWithdrawable) {
             res.json({
@@ -39,6 +36,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             return;
         }
 
+        updateUser(user._id, {
+            tokensWithdrawable: 0,
+        })
+        
         const connection = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
 
         const mintAddress = new PublicKey(process.env.NEXT_PUBLIC_MINT_TOKEN_ADDRESS as string);
@@ -55,8 +56,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             toAddress,
             mintAddress
         );
-
-        const tokenMint = await getMint(connection, mintAddress);
 
         const tx = new Transaction();
 
@@ -86,8 +85,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 mintAddress,
                 toTokenAccount,
                 fromAddress,
-                user.tokensWithdrawable * 10 ** tokenMint.decimals, // amount to transfer
-                tokenMint.decimals // decimals of token
+                user.tokensWithdrawable * 10 ** 8, // amount to transfer
+                8 // decimals of token
             )
         );
 
