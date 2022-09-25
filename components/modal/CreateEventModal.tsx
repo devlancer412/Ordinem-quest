@@ -41,6 +41,7 @@ const CreateEventModal = () => {
                         <div className="w-full flex flex-row justify-center items-center gap-[18px] mb-[30px]">
                             {Deadlines.map(item => (
                                 <div 
+                                    key={item}
                                     className={`py-2 px-5 bg-[#973131] text-white rounded-[20px] border-[3px] hover:cursor-pointer hover:border-black ${item == deadline?'border-black':''}`}
                                     onClick={() => setDeadline(item)}
                                 >
