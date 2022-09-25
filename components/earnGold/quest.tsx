@@ -37,7 +37,7 @@ const DailyQuest = () => {
                             <button className="absolute bg-white rounded-tl-[20px] rounded-br-[20px] py-3 px-4 -right-1 -bottom-1 text-gray-600">
                                 Click here to join > 
                             </button>
-                    </Link>
+                        </Link>
                     </div>)}
                     {user?.isAdmin ?
                         (
