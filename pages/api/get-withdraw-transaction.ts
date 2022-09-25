@@ -82,7 +82,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 toTokenAccount,
                 fromAddress,
                 user.tokensWithdrawable * 10 ** 8, // amount to transfer
-                8 // decimals of token
+                8, // decimals of token
+                [],
+                TOKEN_PROGRAM_ID
             )
         );
 
