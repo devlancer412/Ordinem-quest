@@ -2,6 +2,7 @@ import CreateEventModal from "components/modal/CreateEventModal";
 import { useEvents } from "hooks/useEvents";
 import { useModal } from "hooks/useModal";
 import { useTwitterUser } from "hooks/useTwitterUser";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getCurrentUserData } from "utils/firebase";
 import { updateQuests } from "utils/firebase/quest";
@@ -32,7 +33,11 @@ const DailyQuest = () => {
                         <h1 className="text-white text-[24px] leading-[32px]">{quest.title}</h1>
                         <p className="text-[#B9B8BC] text-[14px] leading-[18px]">{quest.rewardAmount} Gold Available</p>
                         <p className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-1">LIVE</p>
-                        <button className="absolute bg-white rounded-tl-[20px] rounded-br-[20px] py-3 px-4 -right-1 -bottom-1 text-gray-600">Click here to join</button>
+                        <Link href={quest.link}>
+                            <button className="absolute bg-white rounded-tl-[20px] rounded-br-[20px] py-3 px-4 -right-1 -bottom-1 text-gray-600">
+                                Click here to join > 
+                            </button>
+                    </Link>
                     </div>)}
                     {user?.isAdmin ?
                         (
