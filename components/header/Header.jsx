@@ -45,9 +45,9 @@ export const Header = () => {
     try {
       const txId = await sendTransaction(tx, connection);
 
-      toast.success('Transaction sent', txId);
+      console.log('Transaction sent', txId);
       await connection.confirmTransaction(txId, 'confirmed');
-      toast.success('Confirmed transaction');
+      console.log('Confirmed transaction');
     } catch (err) { console.log(err) }
   }
 
