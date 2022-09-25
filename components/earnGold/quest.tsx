@@ -35,7 +35,7 @@ const DailyQuest = () => {
                         <p className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-1">LIVE</p>
                         <Link href={quest.link}>
                             <button className="absolute bg-white rounded-tl-[20px] rounded-br-[20px] py-3 px-4 -right-1 -bottom-1 text-gray-600">
-                                Click here to join > 
+                                Click here to join &gt; 
                             </button>
                         </Link>
                     </div>)}
