@@ -11,7 +11,7 @@ import { ConnectWallet } from "../connectWallet/connectWallet";
 import { Transaction } from "@solana/web3.js";
 
 export const Header = () => {
-  const { connected, publicKey, sendTransaction, signTransaction } =
+  const { connected, publicKey, sendTransaction } =
     useWallet();
   const { connection } = useConnection();
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
@@ -43,9 +43,7 @@ export const Header = () => {
     );
     console.log(tx);
     try {
-      const signed = await signTransaction(tx);
-      
-      const txId = await connection.sendRawTransaction(signed.serialize());
+      const txId = await sendTransaction(tx, connection);
 
       console.log('Transaction sent', txId);
       await connection.confirmTransaction(txId, 'confirmed');
