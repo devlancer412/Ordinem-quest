@@ -41,14 +41,14 @@ export default function EarnGold() {
                     selected
                       ? "bg-gradient text-gray-800 dark:text-white"
                       : "bg-gray-800"
-                  } ${tab.comingSoon && "pointer-events-none opacity-80"}`}
+                  }`}
                 >
                   {tab.title}
-                  {tab.comingSoon && (
+                  {/* {tab?.comingSoon && (
                     <span className="rounded-lg ml-2 px-4 py-1 text-sm bg-gray-300 text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                       Soon
                     </span>
-                  )}
+                  )} */}
                 </button>
               )}
             </Tab>
