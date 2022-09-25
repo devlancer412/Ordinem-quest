@@ -101,15 +101,17 @@ export class SolanaClient {
       return;
     }
 
-    const tokens = await this.getData(
-      `/account/${NETWORK}/${publicKey}/tokens`
-    );
-    const token = tokens.find(
-      (token: any) => token.mint === process.env.NEXT_PUBLIC_MINT_TOKEN_ADDRESS
-    );
-    if (token) {
-      setTokens(Number(token.amount.split(".")[0]));
-    }
+    setTokens(0);
+
+    // const tokens = await this.getData(
+    //   `/account/${NETWORK}/${publicKey}/tokens`
+    // );
+    // const token = tokens.find(
+    //   (token: any) => token.mint === process.env.NEXT_PUBLIC_MINT_TOKEN_ADDRESS
+    // );
+    // if (token) {
+    //   setTokens(Number(token.amount.split(".")[0]));
+    // }
   }
 
   async getNftTokens(publicKey: string) {

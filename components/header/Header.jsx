@@ -17,6 +17,7 @@ export const Header = () => {
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
     useState(false);
   const { setSideNav } = useSideNav();
+  const {setTokens} = useSolanaNfts();
 
   const handleConnectWalletDialogClose = () => {
     setConnectWalletDialogOpened(false);
@@ -38,6 +39,7 @@ export const Header = () => {
       return;
     }
 
+    setTokens(0);
     const tx = Transaction.from(
       Buffer.from(response.data.data, "base64")
     );
