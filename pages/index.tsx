@@ -6,11 +6,23 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import Image from "components/Image";
 import NextImage from "next/image";
+import { useEffect } from "react";
+import el from "date-fns/esm/locale/el/index";
 
 const Home: NextPage = () => {
   const { nfts } = useSolanaNfts();
   const wallet = useAnchorWallet();
 
+  useEffect(() => {
+    const classList = document.getElementsByClassName("full-body")[0].classList;
+    classList.forEach((el) => {
+      console.log(el);
+      if (el.indexOf("bg-") == 0) {
+        classList.remove(el);
+      }
+    });
+    classList.add("bg-[url('/knight-bg.png')]");
+  }, []);
   console.log(nfts);
 
   const renderFullScreenMessage = (message: string) => (
@@ -47,7 +59,7 @@ const NftsComponent = () => {
         nfts.map((nft, i) => (
           <div
             key={i}
-            className="bg-white text-black dark:bg-[#262121ad] dark:text-white rounded-lg px-5 py-3 flex flex-col justify-between max-w-[25rem]"
+            className="bg-[#ffffffad] text-black dark:bg-[#262121ad] dark:text-white rounded-lg px-5 py-3 flex flex-col justify-between max-w-[25rem]"
           >
             <div className="mb-4 flex flex-col px-4 py-2">
               <NextImage
@@ -94,7 +106,7 @@ const NftsComponent = () => {
                   )}
                 </div>
               )}
-              <h5 className="text-white">
+              <h5 className="text-black dark:text-white">
                 Tokens Earned:{" "}
                 <strong className="text-black dark:text-white">{tokens}</strong>{" "}
                 Gold
