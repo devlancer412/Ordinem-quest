@@ -153,7 +153,7 @@ export const Sidenav = () => {
               </div>
             );
           })}
-          <div className="flex w-full mt-20">
+          <div className="flex w-full py-10">
             <TwitterCard />
             {!currentUser && (
               <div className="flex flex-col gap-4 items-center">
@@ -174,12 +174,12 @@ const TwitterCard = () => {
 
   if (!userData) return null;
   return (
-    <div className="w-full px-8 pb-8 mx-4 bg-gradient-to-bl from-primary-500 rounded-2xl to-secondary-500">
+    <div className="w-full px-8 pb-8 mx-4 bg-gradient-to-bl from-primary-500 rounded-[16px] to-secondary-500">
       <div className="mt-4">
         <Twitter className="" width="40" height="33" />
       </div>
       <div className="flex flex-col items-center mt-4">
-        <div>
+        <div className="-mt-11">
           <Image
             className="rounded-full"
             src={
@@ -210,9 +210,11 @@ const TwitterCard = () => {
           </p>
         </div>
         <Link href={"/earn-gold"}>
-          <a className="flex items-center justify-center w-full px-4 py-2 mt-8 bg-white rounded-2xl">
-            <FollowIcon />
-            <span className="mx-2 text-black">Earn Gold</span>
+          <a className="flex items-center justify-between w-full px-4 py-2 mt-8 bg-white rounded-[12px]">
+            <div className="flex items-center">
+              <FollowIcon />
+              <span className="mx-2 text-black">Earn Gold</span>
+            </div>
             <ArrowRight />
           </a>
         </Link>

@@ -30,7 +30,7 @@ const Tweet = () => {
 
   const { currentUser } = useTwitterUser();
   const wallet = useAnchorWallet();
-  const walletContextState = useWallet()
+  const walletContextState = useWallet();
 
   const { openNotification } = useNotification();
   const { tweet_id, quotasEnded } = useQuests();
@@ -64,8 +64,8 @@ const Tweet = () => {
   }, [wallet]);
 
   const sendTokens = async (quest: string, amount?: number) => {
-    if(!wallet) return;
-    const _amount =await updateTokensToDB(
+    if (!wallet) return;
+    const _amount = await updateTokensToDB(
       wallet.publicKey.toString(),
       amount ?? 5
     );
@@ -233,8 +233,6 @@ const Tweet = () => {
               text="Next"
               onClick={changeTweet}
             />
-
-
           </div>
         )}
       </div>
