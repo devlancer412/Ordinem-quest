@@ -52,7 +52,7 @@ export default function EarnGold() {
                     selected
                       ? "bg-[#ff000033] text-gray-800 dark:text-white"
                       : "bg-[#26212180]"
-                  } ${tab.comingSoon && "pointer-events-none opacity-80"}`}
+                  }`}
                 >
                   {tab.title}
                   {/* {tab?.comingSoon && (
