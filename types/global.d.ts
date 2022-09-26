@@ -25,10 +25,11 @@ declare global {
     type Quest = {
         title: string;
         description: string;
-        deadline: Deadline;
+        deadline: string;
         link: string;
         rewardAmount: number;
         createdTime?: string;
+        creator?: string;
         [key: string]: any;
     }
 }

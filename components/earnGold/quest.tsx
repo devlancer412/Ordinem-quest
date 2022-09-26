@@ -5,7 +5,7 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getCurrentUserData } from "utils/firebase";
-import { updateQuests } from "utils/firebase/quest";
+import { updateQuests, deleteQuest } from "utils/firebase/quest";
 
 const DailyQuest = () => {
   const { setModal } = useModal();
@@ -24,6 +24,11 @@ const DailyQuest = () => {
   useEffect(() => {
     load();
   }, []);
+
+  const deleteQuestById = async (id: any) => {
+    await deleteQuest(id);
+    load();
+  };
 
   return (
     <>
@@ -44,9 +49,21 @@ const DailyQuest = () => {
                 <p className="text-[#B9B8BC] text-[14px] leading-[18px]">
                   {quest.rewardAmount} Gold Available
                 </p>
-                <p className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-3 font-bold">
-                  LIVE
-                </p>
+                <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
+                  <p className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-3 font-bold">
+                    LIVE
+                  </p>
+                  {user?.isAdmin ? (
+                    <button
+                      className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase"
+                      onClick={() => deleteQuestById(quest._id)}
+                    >
+                      Delete
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                </div>
                 <Link href={quest.link}>
                   <button className="absolute bg-white rounded-tl-[16px]  py-1 px-4 right-0 bottom-0 text-gray-600 border-2 border-white font-bold">
                     Click here to join &gt;
