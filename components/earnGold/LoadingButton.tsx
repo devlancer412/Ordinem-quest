@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 interface ButtonProps {
   onClick: () => Promise<void>;
   className?: string;
-  text: string
+  text: string;
 }
 
 const LoadingButton: FC<ButtonProps> = ({ onClick, className, text }) => {
@@ -19,7 +19,7 @@ const LoadingButton: FC<ButtonProps> = ({ onClick, className, text }) => {
           setIsVerifying(false);
         }
       }}
-      className={`bg-gray-50 text-blue-700 px-5 min-w-[5rem] py-2 rounded-lg duration-75 font-semibold ${className} ${
+      className={`bg-none text-white px-5 min-w-[5rem] py-2 rounded-lg duration-75 font-semibold ${className} ${
         isVerifying && "opacity-60 pointer-events-none"
       }`}
     >
@@ -28,5 +28,4 @@ const LoadingButton: FC<ButtonProps> = ({ onClick, className, text }) => {
   );
 };
 
-
-export default LoadingButton
+export default LoadingButton;

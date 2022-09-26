@@ -16,7 +16,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     const classList = document.getElementsByClassName("full-body")[0].classList;
     classList.forEach((el) => {
-      console.log(el);
       if (el.indexOf("bg-") == 0) {
         classList.remove(el);
       }
@@ -72,11 +71,18 @@ const NftsComponent = () => {
 
               <div className="flex gap-3 items-center mt-2 justify-center">
                 <div className="rounded-full min-w-[6rem] w-1/2 h-2 border border-gray-300">
-                  <div className={`h-full bg-green-400`} style={{width: `${(nft.XP ? nft.XP : 0) / (nft.level + 1)}%`}}></div>
+                  <div
+                    className={`h-full bg-green-400`}
+                    style={{
+                      width: `${(nft.XP ? nft.XP : 0) / (nft.level + 1)}%`,
+                    }}
+                  ></div>
                 </div>
                 <h5 className="text-gray-500">
                   Level{" "}
-                  <strong className="text-black dark:text-white">{nft?.level?nft.level:0}</strong>
+                  <strong className="text-black dark:text-white">
+                    {nft?.level ? nft.level : 0}
+                  </strong>
                 </h5>
               </div>
             </div>
