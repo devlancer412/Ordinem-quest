@@ -5,7 +5,7 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getCurrentUserData } from "utils/firebase";
-import { updateQuests } from "utils/firebase/quest";
+import { updateQuests, deleteQuest } from "utils/firebase/quest";
 
 const DailyQuest = () => {
     const { setModal } = useModal();
@@ -25,6 +25,11 @@ const DailyQuest = () => {
         load();
     }, []);
 
+    const deleteQuestById = async (id: any) => {
+        await deleteQuest(id);
+        load();
+    }
+
     return (
         <>
             <div className="w-full grid grid-cols-1 gap-5 py-10">
@@ -32,10 +37,15 @@ const DailyQuest = () => {
                     {quests.map((quest, index) => <div key={index} className="relative w-full bg-[#D24B4B80] border-2 border-white rounded-[16px] py-6 px-9 overflow-hidden">
                         <h1 className="text-white text-[24px] leading-[32px]">{quest.title}</h1>
                         <p className="text-[#B9B8BC] text-[14px] leading-[18px]">{quest.rewardAmount} Gold Available</p>
-                        <p className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-1">LIVE</p>
+                        <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
+                            <p className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase text-center">
+                                LIVE
+                            </p>
+                            {user?.isAdmin ? <button className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase" onClick={() => deleteQuestById(quest._id)}>Delete</button> : <></>}
+                        </div>
                         <Link href={quest.link}>
                             <button className="absolute bg-white rounded-tl-[20px] rounded-br-[20px] py-3 px-4 -right-1 -bottom-1 text-gray-600">
-                                Click here to join &gt; 
+                                Click here to join &gt;
                             </button>
                         </Link>
                     </div>)}

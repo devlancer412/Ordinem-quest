@@ -89,3 +89,8 @@
 .twitter-tweet.twitter-tweet-rendered::-webkit-scrollbar-track{
   display: none;
 }
+
+.react-datepicker__input-container input {
+  margin: 10px auto;
+  background: transparent;
+}
