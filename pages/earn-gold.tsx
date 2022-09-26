@@ -42,7 +42,7 @@ export default function EarnGold() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
-      <Tab.Group defaultIndex={1}>
+      <Tab.Group defaultIndex={0}>
         <Tab.List className="flex flex-nowrap md:flex-col gap-x-3 gap-y-6 sticky top-10">
           {tabs.map((tab, i) => (
             <Tab key={i} as={Fragment}>

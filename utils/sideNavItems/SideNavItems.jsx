@@ -4,6 +4,7 @@ import { Mint } from "../../icons/mint";
 import { MyPortfolio } from "../../icons/myPortfolio";
 import { Settings } from "../../icons/settings";
 import { TokenEarnings } from "../../icons/tokenEarnings";
+import { Dashboard } from '../../icons/dashboard'
 
 export const sideNavItems = {
   menuItems: [
@@ -16,8 +17,7 @@ export const sideNavItems = {
         {
           title: "Market",
           icon: <Market />,
-          link: "/",
-          comingSoon: true,
+          link: "/market",
         },
       ],
     },
@@ -34,16 +34,16 @@ export const sideNavItems = {
           icon: <TokenEarnings className="fill-gray-500 hover:fill-white" />,
           link: "/earn-gold",
         },
-        // {
-        //   title: "History",
-        //   icon: <Dashboard className="fill-gray-500 hover:fill-white" />,
-        //   link: "/",
-        // },
+        {
+          title: "History",
+          icon: <Dashboard className="fill-gray-500 hover:fill-white" />,
+          link: "/state",
+        },
         {
           title: "Settings",
           icon: <Settings className="fill-gray-500 hover:fill-white" />,
           link: "/",
-          comingSoon: true,
+          commingsoon: true,
         },
       ],
     },
