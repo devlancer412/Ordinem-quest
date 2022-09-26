@@ -60,7 +60,10 @@ const Follow = () => {
           `/api/get-twitter-followers?user_id=${user.uid}`
         );
         const currentUserId = currentUser?.providerData[0]?.uid;
-        const followId = currentUserId?.length == 19 ? Math.floor(Number(currentUserId) / 100) * 100 : Number(currentUserId);
+        const followId =
+          currentUserId?.length == 19
+            ? Math.floor(Number(currentUserId) / 100) * 100
+            : Number(currentUserId);
 
         console.log(followId, result.data.data.ids);
         if (
@@ -114,61 +117,68 @@ const Follow = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center px-4 py-8 my-2 bg-gray-800 h-full rounded-lg">
-        <Image
-          src={user.image}
-          className="rounded-lg"
-          alt={user.name ?? user.displayName}
-          height={200}
-          width={200}
-        />
-        <h3 className="mt-2">{user.name ?? user.displayName}</h3>
+      <div className="relative flex flex-col items-center h-full px-10 py-20 bg-[#161617af]">
+        <Image src="/follow-border.png" className="w-[100%]" layout="fill" />
+        <div className="flex flex-col items-center  my-2  h-full rounded-lg z-10">
+          <Image
+            src={user.image}
+            className="rounded-full"
+            alt={user.name ?? user.displayName}
+            height={200}
+            width={200}
+          />
+          <h1 className="mt-2 text-3xl font-bold">
+            {user.name ?? user.displayName}
+          </h1>
 
-        {user.following && user.followers && (
-          <div className="flex items-center gap-4 mt-4">
-            <div className="flex flex-col items-center">
-              <h6 className="text-xl">{user?.followers}</h6>
-              <h5 className="text-gray-400">Followers</h5>
+          {user.following && user.followers && (
+            <div className="flex items-center gap-4 mt-4">
+              <div className="flex flex-col items-center">
+                <h6 className="text-xl">{user?.followers}</h6>
+                <h5 className="text-gray-400">Followers</h5>
+              </div>
+              <div className="flex flex-col items-center">
+                <h6 className="text-xl">{user?.following}</h6>
+                <h5 className="text-gray-400">Followings</h5>
+              </div>
             </div>
-            <div className="flex flex-col items-center">
-              <h6 className="text-xl">{user?.following}</h6>
-              <h5 className="text-gray-400">Followings</h5>
-            </div>
-          </div>
-        )}
+          )}
 
-        <div className="flex gap-3 items-center mt-6">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href={`https://twitter.com/intent/follow?screen_name=${user.screen_name ?? user.screenName
+          <div className="flex gap-3 items-center mt-6">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={`https://twitter.com/intent/follow?screen_name=${
+                user.screen_name ?? user.screenName
               }`}
-            className="bg-blue-400 text-white px-5 py-2 rounded-lg"
-          >
-            Follow @{user.screen_name ?? user.screenName}
-          </a>
-
-          {isVerified ? (
-            <h4>Verified</h4>
-          ) : (
-            <button
-              onClick={verifyUserFollow}
-              className={`bg-gray-50 text-blue-700 px-5 min-w-[5rem] py-2 rounded-lg duration-75 font-semibold ${isVerifying && "opacity-60 pointer-events-none"
-                }`}
+              className="flex justify-center bg-[#C62828] border-2 border-white text-white px-5 py-2 rounded-lg min-w-[130px] font-semibold"
             >
-              {isVerifying ? <Spinner /> : "Verify follow"}
-            </button>
-          )}
-        </div>
+              Follow
+            </a>
 
-        {usersToFollow.length > 0 &&
-          indexOfUser !== usersToFollow.length - 1 && (
-            <LoadingButton
-              className="mt-4"
-              text="Next"
-              onClick={fetchAndChangeUser}
-            />
-          )}
+            {isVerified ? (
+              <h4>Verified</h4>
+            ) : (
+              <button
+                onClick={verifyUserFollow}
+                className={`bg-[#454545] border-2 border-white text-white px-5 min-w-[130px] py-2 rounded-lg duration-75 font-semibold ${
+                  isVerifying && "opacity-60 pointer-events-none"
+                }`}
+              >
+                {isVerifying ? <Spinner /> : "Verify"}
+              </button>
+            )}
+          </div>
+
+          {usersToFollow.length > 0 &&
+            indexOfUser !== usersToFollow.length - 1 && (
+              <LoadingButton
+                className="mt-4"
+                text="Skip"
+                onClick={fetchAndChangeUser}
+              />
+            )}
+        </div>
       </div>
     </>
   );
