@@ -1,6 +1,7 @@
 import { Tab } from "@headlessui/react";
 import Follow from "components/earnGold/follow";
 import Knights from "components/earnGold/knights";
+import DailyQuest from "components/earnGold/quest";
 import Tweet from "components/earnGold/tweet";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { useTwitterUser } from "hooks/useTwitterUser";
@@ -10,7 +11,7 @@ export default function EarnGold() {
   const tabs = [
     {
       title: "Daily Quests",
-      comingSoon: true,
+      component: <DailyQuest />,
     },
     {
       title: "Follow",
@@ -54,11 +55,11 @@ export default function EarnGold() {
                   } ${tab.comingSoon && "pointer-events-none opacity-80"}`}
                 >
                   {tab.title}
-                  {tab.comingSoon && (
+                  {/* {tab?.comingSoon && (
                     <span className="rounded-lg ml-2 px-4 py-1 text-sm bg-gray-300 text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                       Soon
                     </span>
-                  )}
+                  )} */}
                 </button>
               )}
             </Tab>

@@ -12,6 +12,7 @@ import {
   getRandomUser,
   updateUser,
   updateUserData,
+  updateNftXP,
 } from "utils/firebase";
 import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
@@ -68,14 +69,14 @@ const Follow = () => {
           result.data.data.ids.includes(followId)
         ) {
           setIsVerified(true);
-          updateUser(user._id, {
+          await updateUser(user._id, {
             followers: arrayUnion(currentUserId),
           });
-          updateUserData({
+          await updateUserData({
             followCount: increment(1),
             lastFollowed: serverTimestamp(),
-            XP: increment(50),
           });
+          await updateNftXP(50);
           const amount = await updateTokensToDB(
             wallet?.publicKey.toString() as string,
             5

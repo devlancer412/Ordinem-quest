@@ -1,6 +1,6 @@
 import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
 import { useEffect, useLayoutEffect, useState } from "react";
-import SolanaClient from "utils/solanaClient";
+import solanaClient from "utils/solanaClient";
 import { Header } from "../header/Header";
 import { Sidenav } from "../sidenav/Sidenav";
 import { getAuth } from "firebase/auth";
@@ -23,7 +23,6 @@ export const Layout: React.FC<Props> = ({ children }) => {
   const { nfts } = useSolanaNfts();
   const auth = getAuth();
   const [updateOwnershipFlage, setUpdateOwnershipFlag] = useState<boolean>(true);
-  const solanaClient = new SolanaClient();
 
   useEffect(() => {
     if (nfts && nfts.length && updateOwnershipFlage && currentUser) {

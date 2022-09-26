@@ -1,20 +1,57 @@
+import Link from "next/link";
+import axios from "axios";
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useSideNav } from "hooks/useSideNav";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
-import Link from "next/link";
 import { useState } from "react";
 import { Hamburger } from "../../icons/hamburger";
 import { Bell } from "../../icons/bell";
 import { ConnectWallet } from "../connectWallet/connectWallet";
+import { Transaction } from "@solana/web3.js";
 
 export const Header = () => {
+  const { connected, publicKey, sendTransaction } =
+    useWallet();
+  const { connection } = useConnection();
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
     useState(false);
   const { setSideNav } = useSideNav();
+  const {setTokens} = useSolanaNfts();
 
   const handleConnectWalletDialogClose = () => {
     setConnectWalletDialogOpened(false);
   };
+
+  const withdrawGold = async () => {
+    if (!connected) {
+      console.error("not connected");
+      return;
+    }
+
+    const response = await axios.get(
+      `/api/get-withdraw-transaction?user_wallet=${publicKey.toBase58()}`
+    );
+
+    console.log(response.data)
+    if (response.data.status != 'ok') {
+      console.log(response.data.error);
+      return;
+    }
+
+    setTokens(0);
+    const tx = Transaction.from(
+      Buffer.from(response.data.data, "base64")
+    );
+    console.log(tx);
+    try {
+      const txId = await sendTransaction(tx, connection);
+
+      console.log('Transaction sent', txId);
+      await connection.confirmTransaction(txId, 'confirmed');
+      console.log('Confirmed transaction');
+    } catch (err) { console.log(err) }
+  }
 
   return (
     <>
@@ -43,7 +80,7 @@ export const Header = () => {
             <SearchComponent />
           </div>
           <div className="flex items-center gap-3">
-            <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold">Withdraw Gold</button>
+            <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold" onClick={withdrawGold}>Withdraw Gold</button>
             <WalletMultiButton className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:!bg-[#b30000] hover:text-white h-10 px-4 font-bold"></WalletMultiButton>
             <button className="rounded-full bg-[#F1F1F1] text-[#7A797D] hover:bg-primary-900 h-10 px-2"><Bell /></button>
             {/* <div className="bg-white w-10 h-10 rounded-full flex justify-center items-center">

@@ -60,7 +60,7 @@ export async function signInWithTwitterFirebase(address?: string) {
       const userDoc = docs.docs[0];
       const user = userDoc.data();
 
-      if (user.wallet.length === 0) {
+      if (!user.wallet || user.wallet.length === 0) {
         await updateUser(userDoc.id, {
           wallet: address,
         });
