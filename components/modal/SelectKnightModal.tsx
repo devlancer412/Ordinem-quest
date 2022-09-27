@@ -8,8 +8,13 @@ const SelectKnightModal = () => {
   return (
     <ModalWrapper>
       <div className="px-12 py-7  bg-[url('/select_knight_bg.png')] bg-cover rounded-2xl">
-        <div className="bg-white bg-opacity-50 font-bold text-black text-lg py-3 px-4 rounded-2xl">
-          Select The Knight You Wish To Give Quest Experience To
+        <div className="flex items-center bg-white bg-opacity-50 font-bold text-black text-lg py-3 px-4 rounded-2xl">
+          <p>
+            Select The Knight You Wish To Give Quest Experience To
+            <span className="align-text-bottom inline-block">
+              <img src="/bottle.svg" width={30} height={30} />
+            </span>
+          </p>
         </div>
         <div className="w-full mt-5">
           {nfts && nfts.length ? (
