@@ -50,7 +50,7 @@ export default function EarnGold() {
     }
   }, [showModal]);
 
-  const onClickTab = (index) => {
+  const onClickTab = (index: number) => {
     setSelectedTab(index);
     if (index == 3) {
       setModal(true);
