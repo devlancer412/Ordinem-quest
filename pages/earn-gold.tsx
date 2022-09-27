@@ -71,7 +71,7 @@ export default function EarnGold() {
             <Tab key={i} as={Fragment}>
               {({ selected }) => (
                 <button
-                  className={`text-white px-5 py-2 rounded-md border-2 border-white dark:border-white min-w-[145px] ${
+                  className={`text-white px-5 py-4 rounded-md border-2 border-white dark:border-white min-w-[145px] ${
                     selected
                       ? "bg-[#ff000033] text-gray-800 dark:text-white"
                       : "bg-[#26212180]"
