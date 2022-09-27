@@ -15,6 +15,8 @@ const GlobalState = () => {
         })();
     }, []);
 
+    console.log(users);
+
     return <div className="global-state w-full h-full py-[23px]">
         <table className="w-full h-full rounded-[20px]">
             <thead>
@@ -32,8 +34,8 @@ const GlobalState = () => {
                         <td>{index + 1}</td>
                         <td>{formatWalletString(user?.wallet ?? '')}</td>
                         <td>{user?.tokensEarned ?? 0}</td>
-                        <td>{0}</td>
-                        <td>{0}</td>
+                        <td>{user?.swapedSol ?? 0}</td>
+                        <td>{(user?.followCount ?? 0) + (user?.likeCount ?? 0) + (user?.replyCount ?? 0)}</td>
                     </tr>
                 ))}
             </tbody>
