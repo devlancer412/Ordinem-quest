@@ -3,9 +3,11 @@ import Follow from "components/earnGold/follow";
 import Knights from "components/earnGold/knights";
 import DailyQuest from "components/earnGold/quest";
 import Tweet from "components/earnGold/tweet";
+import SelectKnightModal from "components/modal/SelectKnightModal";
+import { useModal } from "hooks/useModal";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { useTwitterUser } from "hooks/useTwitterUser";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 export default function EarnGold() {
   const tabs = [
@@ -23,11 +25,14 @@ export default function EarnGold() {
     },
     {
       title: "Select Knight",
-      component: <Knights />,
+      // component: <Knights />,
     },
   ];
   const { currentUser } = useTwitterUser();
   const { allNfts } = useSolanaNfts();
+  const { showModal, setModal } = useModal();
+  const [before, setBefore] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
     const classList = document.getElementsByClassName("full-body")[0].classList;
@@ -39,9 +44,28 @@ export default function EarnGold() {
     classList.add("bg-[url('/earn-gold.png')]");
   }, []);
 
+  useEffect(() => {
+    if (showModal == false) {
+      setSelectedTab(before);
+    }
+  }, [showModal]);
+
+  const onClickTab = (index) => {
+    setSelectedTab(index);
+    if (index == 3) {
+      setModal(true);
+    } else {
+      setBefore(index);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
-      <Tab.Group defaultIndex={0}>
+      <Tab.Group
+        defaultIndex={0}
+        selectedIndex={selectedTab}
+        onChange={(i) => onClickTab(i)}
+      >
         <Tab.List className="flex flex-nowrap md:flex-col gap-x-3 gap-y-6 sticky top-10 overflow-auto z-10">
           {tabs.map((tab, i) => (
             <Tab key={i} as={Fragment}>
@@ -84,6 +108,7 @@ export default function EarnGold() {
           ))}
         </Tab.Panels>
       </Tab.Group>
+      <SelectKnightModal />
     </div>
   );
 }

@@ -51,6 +51,21 @@
   }
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: black white;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 20px;
+}
+
 .blur-background img {
   @apply relative;
 }
