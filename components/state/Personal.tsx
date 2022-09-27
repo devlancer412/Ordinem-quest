@@ -15,11 +15,11 @@ const PersonalState = () => {
     return <div className="w-full grid grid-cols-3">
         <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
             <h5 className="text-[25px]">Total Raids Completed</h5>
-            <h1 className="text-[100px]">142</h1>
+            <h1 className="text-[100px]">{(user?.followCount ?? 0) + (user?.likeCount ?? 0) + (user?.replyCount ?? 0)}</h1>
         </div>
         <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
             <h5 className="text-[25px]">Total Follows</h5>
-            <h1 className="text-[100px]">{currentUser?.followers}</h1>
+            <h1 className="text-[100px]">{(user?.followCount ?? 0)}</h1>
         </div>
         <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
             <h5 className="text-[25px]">Total Gold Earned</h5>
