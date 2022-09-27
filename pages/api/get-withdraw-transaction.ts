@@ -104,10 +104,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             status: "ok",
             data: serializedTransaction.toString("base64"),
         });
-
-        updateUser(user._id, {
-            tokensWithdrawable: 0,
-        })
         
         return;
 

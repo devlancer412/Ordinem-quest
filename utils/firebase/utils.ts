@@ -105,3 +105,9 @@ export async function getNftFromMint(mint: string) {
     await getDocs(query(nftCollection, where("mint", "==", mint)))
   )[0];
 }
+
+export async function getAllUsers() {
+  return getData(
+    await getDocs(query(userCollection))
+  )
+}

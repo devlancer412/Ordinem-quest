@@ -9,6 +9,7 @@ import { Hamburger } from "../../icons/hamburger";
 import { Bell } from "../../icons/bell";
 import { ConnectWallet } from "../connectWallet/connectWallet";
 import { Transaction } from "@solana/web3.js";
+import { getCurrentUserData, updateUser } from "utils/firebase";
 
 export const Header = () => {
   const { connected, publicKey, sendTransaction } =
@@ -17,7 +18,7 @@ export const Header = () => {
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
     useState(false);
   const { setSideNav } = useSideNav();
-  const {setTokens} = useSolanaNfts();
+  const { setTokens } = useSolanaNfts();
 
   const handleConnectWalletDialogClose = () => {
     setConnectWalletDialogOpened(false);
@@ -48,8 +49,11 @@ export const Header = () => {
       const txId = await sendTransaction(tx, connection);
 
       console.log('Transaction sent', txId);
+      const user = await getCurrentUserData();
+      updateUser(user._id, {
+        tokensWithdrawable: 0,
+      })
       await connection.confirmTransaction(txId, 'confirmed');
-      console.log('Confirmed transaction');
     } catch (err) { console.log(err) }
   }
 
