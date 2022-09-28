@@ -74,38 +74,38 @@ const DailyQuest = () => {
           <>
             {quests.filter((quest: Quest) => !user?.quests || user.quests.indexOf(quest._id) < 0)
               .map((quest, index) => (
-              <div
-                key={index}
-                className="relative w-full bg-[#81212199] border-2 border-white rounded-[16px] py-6 px-9 overflow-hidden h-[100px]"
-              >
-                <h1 className="text-white text-[24px] leading-[32px] font-bold">
-                  {quest.title}
-                </h1>
-                <p className="text-[#B9B8BC] text-[14px] leading-[18px]">
-                  {quest.rewardAmount} Gold Available
-                </p>
-                <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
-                  <button className=" bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold text-center" onClick={() => verifyQuest(quest)}>
-                  Verify
-                  </button>
-                  {user?.isAdmin ? (
-                    <button
-                      className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold"
-                      onClick={() => deleteQuestById(quest._id)}
-                    >
-                      Delete
+                <div
+                  key={index}
+                  className="relative w-full bg-[#81212199] border-2 border-white rounded-[16px] py-6 px-9 overflow-hidden h-[100px]"
+                >
+                  <h1 className="text-white text-[24px] leading-[32px] font-bold">
+                    {quest.title}
+                  </h1>
+                  <p className="text-[#B9B8BC] text-[14px] leading-[18px]">
+                    {quest.rewardAmount} Gold Available
+                  </p>
+                  <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
+                    <button className=" bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold text-center" onClick={() => verifyQuest(quest)}>
+                      Verify
                     </button>
-                  ) : (
-                    <></>
-                  )}
+                    {user?.isAdmin ? (
+                      <button
+                        className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold"
+                        onClick={() => deleteQuestById(quest._id)}
+                      >
+                        Delete
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <Link href={quest.link}>
+                    <button className="absolute bg-white rounded-tl-[16px]  py-1 px-4 right-0 bottom-0 text-gray-600 border-2 border-white font-bold">
+                      Click here to join &gt;
+                    </button>
+                  </Link>
                 </div>
-                <Link href={quest.link}>
-                  <button className="absolute bg-white rounded-tl-[16px]  py-1 px-4 right-0 bottom-0 text-gray-600 border-2 border-white font-bold">
-                    Click here to join &gt;
-                  </button>
-                </Link>
-              </div>
-            ))}
+              ))}
             {user?.isAdmin ? (
               <div
                 className="w-full bg-[#FFFFFF80] border-2 border-white rounded-[16px] py-6 px-9 text-black text-[24px] leading-[32px] text-center hover:cursor-pointer h-[100px] flex justify-center items-center"
