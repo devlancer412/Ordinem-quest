@@ -55,7 +55,6 @@ async function randomUserFunc() {
     hasNft = nfts.filter(nft => nft.twitter == randomUser.screenName).length > 0;
   }
 
-  console.log(randomUser);
   logUser(users);
 }
 
@@ -65,7 +64,6 @@ function logUser(users) {
 
 async function getallUsers() {
   let users = getData(await getDocs(query(userCollection)));
-  console.log(users.length);
   const available = {};
   for (let i = 0; i < users.length; i++) {
     if (!available[users[i].uid]) {

@@ -16,18 +16,18 @@ const PersonalState = () => {
     <div className="w-[80%] grid md:grid-cols-3 grid-cols-1 lg:flex-row justify-around gap-10 py-[70px]">
       <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
         <h5 className="text-[25px]">Total Raids Completed</h5>
-        <h1 className="text-[100px] leading-none">142</h1>
+        <h1 className="text-[100px] leading-none">{(user?.followCount ?? 0) + (user?.likeCount ?? 0) + (user?.replyCount ?? 0)}</h1>
       </div>
       <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
         <h5 className="text-[25px]">Total Follows</h5>
         <h1 className="text-[100px] leading-none">
-          {currentUser?.followers | 150}
+          {(user?.followCount ?? 0)}
         </h1>
       </div>
       <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
         <h5 className="text-[25px]">Total Gold Earned</h5>
         <h1 className="text-[100px] leading-none">
-          {user?.tokensEarned | 350}
+          {user?.tokensEarned}
         </h1>
       </div>
     </div>

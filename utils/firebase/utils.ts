@@ -108,6 +108,8 @@ export async function getNftFromMint(mint: string) {
 
 export async function getAllUsers() {
   return getData(
-    await getDocs(query(userCollection))
-  )
+    await getDocs(
+      query(userCollection)
+    )
+  );
 }
