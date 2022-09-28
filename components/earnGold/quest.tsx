@@ -61,6 +61,8 @@ const DailyQuest = () => {
       ));
 
       load();
+    } else {
+      console.log(result?.data?.message);
     }
   }
 
