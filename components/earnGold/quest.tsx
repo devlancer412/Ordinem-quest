@@ -85,15 +85,12 @@ const DailyQuest = () => {
                   {quest.rewardAmount} Gold Available
                 </p>
                 <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
-                  <button
-                    className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-3 font-bold"
-                    onClick={() => verifyQuest(quest)}
-                  >
-                    Verify
+                  <button className=" bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold text-center" onClick={() => verifyQuest(quest)}>
+                  Verify
                   </button>
                   {user?.isAdmin ? (
                     <button
-                      className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase"
+                      className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold"
                       onClick={() => deleteQuestById(quest._id)}
                     >
                       Delete
@@ -111,7 +108,7 @@ const DailyQuest = () => {
             ))}
             {user?.isAdmin ? (
               <div
-                className="w-full bg-[#FFFFFF80] border-2 border-white rounded-[16px] py-6 px-9 text-black text-[24px] leading-[32px] text-center hover:cursor-pointer"
+                className="w-full bg-[#FFFFFF80] border-2 border-white rounded-[16px] py-6 px-9 text-black text-[24px] leading-[32px] text-center hover:cursor-pointer h-[100px] flex justify-center items-center"
                 onClick={() => setModal(true)}
               >
                 CREATE NEW EVENT +

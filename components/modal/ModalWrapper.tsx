@@ -17,7 +17,7 @@ const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
         style={{
           zIndex: 1001,
         }}
-        className="fixed w-full max-w-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-3"
+        className="fixed w-full max-w-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-h-[80%] overflow-y-auto"
       >
         {children}
       </div>

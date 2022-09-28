@@ -27,6 +27,7 @@ import React, { FC, useMemo } from "react";
 import { Layout } from "../components/layouts/layout";
 import "utils/firebase";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
+import Image from "next/image";
 
 // Use require instead of import since order matters
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -41,7 +42,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Providers>
           <Layout>
-            <div className="full-body fixed top-0 left-0 -z-40"></div>
+            <div className="full-body fixed top-0 left-0 -z-40">
+              <Image src="/earn-gold.png" className="w-[100%]" layout="fill" />
+            </div>
             <Component {...pageProps} />
           </Layout>
         </Providers>
