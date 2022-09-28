@@ -108,7 +108,7 @@ export default function EarnGold() {
           ))}
         </Tab.Panels>
       </Tab.Group>
-      <SelectKnightModal />
+      {/* <SelectKnightModal /> */}
     </div>
   );
 }

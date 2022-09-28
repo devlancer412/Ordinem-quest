@@ -1,15 +1,23 @@
 import CreateEventModal from "components/modal/CreateEventModal";
+import Link from "next/link";
+import axios from "axios";
 import { useEvents } from "hooks/useEvents";
 import { useModal } from "hooks/useModal";
 import { useTwitterUser } from "hooks/useTwitterUser";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getCurrentUserData } from "utils/firebase";
+import { getCurrentUserData, updateNftXP, updateUser, updateUserData } from "utils/firebase";
 import { updateQuests, deleteQuest } from "utils/firebase/quest";
+import { arrayUnion, increment, serverTimestamp } from "firebase/firestore";
+import { updateTokensToDB } from "utils/token";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useNotification } from "hooks/useNotification";
+import SuccessPopup from "./SuccessPopup";
 
 const DailyQuest = () => {
   const { setModal } = useModal();
+  const wallet = useWallet();
   const { quests } = useEvents();
+  const { openNotification } = useNotification();
   const [user, setUser] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,6 +38,32 @@ const DailyQuest = () => {
     load();
   };
 
+  const verifyQuest = async (quest: Quest) => {
+    const tweetId = quest.link.split('/')[quest.link.split('/').length - 1].split('?')[0];
+    console.log(tweetId);
+    const result = await axios.get(
+      `/api/verify-quest?user_id=${user.uid}&tweet_id=${tweetId}`
+    );
+
+    if (result?.data?.data == true) {
+      console.log("verified");
+      await updateUserData({
+        quests: arrayUnion(quest?._id),
+        questCount: increment(1),
+        lastQuested: serverTimestamp(),
+        tokensEarned: increment(quest.rewardAmount),
+        tokensWithdrawable: increment(quest.rewardAmount),
+      });
+      await updateNftXP(10 * quest.rewardAmount);
+
+      openNotification(() => (
+        <SuccessPopup goldRecieved={quest.rewardAmount} quest="follow" />
+      ));
+
+      load();
+    }
+  }
+
   return (
     <>
       <div className="bg-[#48111180] border-2 border-white px-5 py-3 rounded-md min-h-[20rem] w-full grid grid-cols-1 gap-5">
@@ -38,7 +72,8 @@ const DailyQuest = () => {
           "Fetching Quests..."
         ) : (
           <>
-            {quests.map((quest, index) => (
+            {quests.filter((quest: Quest) => !user?.quests || user.quests.indexOf(quest._id) < 0)
+              .map((quest, index) => (
               <div
                 key={index}
                 className="relative w-full bg-[#81212199] border-2 border-white rounded-[16px] py-6 px-9 overflow-hidden h-[100px]"
@@ -50,9 +85,12 @@ const DailyQuest = () => {
                   {quest.rewardAmount} Gold Available
                 </p>
                 <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
-                  <p className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-3 font-bold">
-                    LIVE
-                  </p>
+                  <button
+                    className="absolute bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase right-2 top-3 font-bold"
+                    onClick={() => verifyQuest(quest)}
+                  >
+                    Verify
+                  </button>
                   {user?.isAdmin ? (
                     <button
                       className="bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase"
