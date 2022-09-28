@@ -35,7 +35,7 @@ export const sideNavItems = {
           link: "/earn-gold",
         },
         {
-          title: "State",
+          title: "Statistics",
           icon: <Dashboard className="fill-gray-500 hover:fill-white" />,
           link: "/state",
         },

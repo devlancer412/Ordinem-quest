@@ -41,6 +41,7 @@ const GlobalState = () => {
             </tbody>
         </table>
     </div>
-}
+  );
+};
 
 export default GlobalState;

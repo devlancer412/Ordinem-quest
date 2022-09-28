@@ -6,23 +6,10 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import Image from "components/Image";
 import NextImage from "next/image";
-import { useEffect } from "react";
-import el from "date-fns/esm/locale/el/index";
 
 const Home: NextPage = () => {
   const { nfts } = useSolanaNfts();
   const wallet = useAnchorWallet();
-
-  useEffect(() => {
-    const classList = document.getElementsByClassName("full-body")[0].classList;
-    classList.forEach((el) => {
-      if (el.indexOf("bg-") == 0) {
-        classList.remove(el);
-      }
-    });
-    classList.add("bg-[url('/knight-bg.png')]");
-  }, []);
-  console.log(nfts);
 
   const renderFullScreenMessage = (message: string) => (
     <div className="h-[80vh] w-full flex justify-center items-center text-center">
@@ -31,19 +18,24 @@ const Home: NextPage = () => {
   );
 
   return (
-    <div>
-      {(() => {
-        if (!wallet?.publicKey) {
-          return renderFullScreenMessage("Connect your wallet");
-        } else if (!nfts) {
-          return renderFullScreenMessage("Fetching your NFTs...");
-        } else if (nfts && nfts.length > 0) {
-          return <NftsComponent />;
-        } else {
-          return renderFullScreenMessage("There's no NFts in your wallet");
-        }
-      })()}
-    </div>
+    <>
+      <div className="full-body fixed top-0 left-0 -z-40">
+        <NextImage src="/knight-bg.png" className="w-[100%]" layout="fill" />
+      </div>
+      <div>
+        {(() => {
+          if (!wallet?.publicKey) {
+            return renderFullScreenMessage("Connect your wallet");
+          } else if (!nfts) {
+            return renderFullScreenMessage("Fetching your NFTs...");
+          } else if (nfts && nfts.length > 0) {
+            return <NftsComponent />;
+          } else {
+            return renderFullScreenMessage("There's no NFts in your wallet");
+          }
+        })()}
+      </div>
+    </>
   );
 };
 
