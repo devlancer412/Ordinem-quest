@@ -29,6 +29,9 @@ import "utils/firebase";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import Image from "next/image";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 // Use require instead of import since order matters
 require("@solana/wallet-adapter-react-ui/styles.css");
 require("../styles/globals.css");
@@ -42,6 +45,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Providers>
           <Layout>
+            <ToastContainer />
             <div className="full-body fixed top-0 left-0 -z-40">
               <Image src="/earn-gold.png" className="w-[100%]" layout="fill" />
             </div>
