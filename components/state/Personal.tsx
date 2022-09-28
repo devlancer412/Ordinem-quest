@@ -3,29 +3,35 @@ import { useEffect, useState } from "react";
 import { getCurrentUserData } from "utils/firebase";
 
 const PersonalState = () => {
-    const {currentUser} = useTwitterUser();
-    const [user, setUser] = useState<any>();
+  const { currentUser } = useTwitterUser();
+  const [user, setUser] = useState<any>();
 
-    useEffect(() => {
-        (async () => {
-            setUser(await getCurrentUserData());
-        })();
-    }, [])
+  useEffect(() => {
+    (async () => {
+      setUser(await getCurrentUserData());
+    })();
+  }, []);
 
-    return <div className="w-full grid grid-cols-3">
-        <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
-            <h5 className="text-[25px]">Total Raids Completed</h5>
-            <h1 className="text-[100px]">142</h1>
-        </div>
-        <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
-            <h5 className="text-[25px]">Total Follows</h5>
-            <h1 className="text-[100px]">{currentUser?.followers}</h1>
-        </div>
-        <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
-            <h5 className="text-[25px]">Total Gold Earned</h5>
-            <h1 className="text-[100px]">{user?.tokensEarned}</h1>
-        </div>
+  return (
+    <div className="w-[80%] grid md:grid-cols-3 grid-cols-1 lg:flex-row justify-around gap-10 py-[70px]">
+      <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
+        <h5 className="text-[25px]">Total Raids Completed</h5>
+        <h1 className="text-[100px] leading-none">142</h1>
+      </div>
+      <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
+        <h5 className="text-[25px]">Total Follows</h5>
+        <h1 className="text-[100px] leading-none">
+          {currentUser?.followers | 150}
+        </h1>
+      </div>
+      <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
+        <h5 className="text-[25px]">Total Gold Earned</h5>
+        <h1 className="text-[100px] leading-none">
+          {user?.tokensEarned | 350}
+        </h1>
+      </div>
     </div>
-}
+  );
+};
 
 export default PersonalState;
