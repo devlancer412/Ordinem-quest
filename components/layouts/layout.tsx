@@ -1,4 +1,8 @@
-import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from "@solana/wallet-adapter-react";
 import { useEffect, useLayoutEffect, useState } from "react";
 import solanaClient from "utils/solanaClient";
 import { Header } from "../header/Header";
@@ -22,16 +26,21 @@ interface Props {
 export const Layout: React.FC<Props> = ({ children }) => {
   const wallet = useWallet();
   const { connection } = useConnection();
-  const { login, logout, changeUser, getDataFromStorage, currentUser } = useTwitterUser();
+  const { login, logout, changeUser, getDataFromStorage, currentUser } =
+    useTwitterUser();
   const { setSize } = useWindowSize();
   const { nfts, setTokens } = useSolanaNfts();
   const auth = getAuth();
-  const [updateOwnershipFlage, setUpdateOwnershipFlag] = useState<boolean>(true);
+  const [updateOwnershipFlage, setUpdateOwnershipFlag] =
+    useState<boolean>(true);
 
   useEffect(() => {
     if (nfts && nfts.length && updateOwnershipFlage && currentUser) {
       (async () => {
-        await solanaClient.updateNFTOwner(nfts, currentUser.screenName as string);
+        await solanaClient.updateNFTOwner(
+          nfts,
+          currentUser.screenName as string
+        );
         setUpdateOwnershipFlag(false);
       })();
     }
@@ -49,7 +58,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
           changeUser(user.screenName);
         }
 
-        await solanaClient.getGoldTokens(publicKey)
+        await solanaClient.getGoldTokens(publicKey);
         await solanaClient.getAllNfts(publicKey);
         setUpdateOwnershipFlag(true);
       })();
@@ -80,10 +89,9 @@ export const Layout: React.FC<Props> = ({ children }) => {
     window.addEventListener("resize", windowListener);
     getDataFromStorage();
 
-    return () => window.removeEventListener("resize", () => { });
+    return () => window.removeEventListener("resize", () => {});
   }, []);
 
-  
   const withdrawGold = async () => {
     if (!wallet.connected) {
       console.error("not connected");
@@ -91,31 +99,33 @@ export const Layout: React.FC<Props> = ({ children }) => {
     }
 
     const response = await axios.get(
-      `/api/get-withdraw-transaction?user_wallet=${(wallet.publicKey as PublicKey).toBase58()}`
+      `/api/get-withdraw-transaction?user_wallet=${(
+        wallet.publicKey as PublicKey
+      ).toBase58()}`
     );
 
-    console.log(response.data)
-    if (response.data.status != 'ok') {
+    console.log(response.data);
+    if (response.data.status != "ok") {
       console.log(response.data.error);
       return;
     }
 
     setTokens(0);
-    const tx = Transaction.from(
-      Buffer.from(response.data.data, "base64")
-    );
+    const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
     console.log(tx);
     try {
       const txId = await wallet.sendTransaction(tx, connection);
 
-      console.log('Transaction sent', txId);
+      console.log("Transaction sent", txId);
       const user = await getCurrentUserData();
       updateUser(user._id, {
         tokensWithdrawable: 0,
-      })
-      await connection.confirmTransaction(txId, 'confirmed');
-    } catch (err) { console.log(err) }
-  }
+      });
+      await connection.confirmTransaction(txId, "confirmed");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   try {
     return (
@@ -123,7 +133,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
         <div>
           <Alert />
           <Notification />
-          <Sidenav />
+          <Sidenav withdrawGold={withdrawGold} />
           <div className="main">
             <Header withdrawGold={withdrawGold} />
             <div className="mx-2 md:mx-4 py-4 px-3 md:px-6">{children}</div>
