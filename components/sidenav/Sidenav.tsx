@@ -108,6 +108,7 @@ export const Sidenav = () => {
             </div>
           </a>
         </Link>
+
         <div>
           {sideNavItems.menuItems.map((item, index) => {
             return (
@@ -153,6 +154,13 @@ export const Sidenav = () => {
               </div>
             );
           })}
+          {width <= 530 && (
+            <div className="flex justify-center mt-5">
+              <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold m-auto">
+                Withdraw Gold
+              </button>
+            </div>
+          )}
           <div className="flex w-full py-10">
             <TwitterCard />
             {!currentUser && (
