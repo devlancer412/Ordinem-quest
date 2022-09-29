@@ -28,9 +28,16 @@ const Market: NextPage = () => {
   );
 };
 
-const ItemsComponent = (props) => {
-  const { items } = props;
+interface Props {
+  items: {
+    image: string;
+    name: string;
+    description: string;
+    price: number;
+  }[];
+}
 
+const ItemsComponent: React.FC<Props> = ({ items }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-5 justify-items-center">
       {items &&
