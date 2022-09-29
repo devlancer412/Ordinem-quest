@@ -25,7 +25,12 @@ const PersonalStatePage: NextPage = () => {
   return (
     <>
       <div className="full-body fixed top-0 left-0 -z-40">
-        <NextImage src="/history-bg.png" className="w-[100%]" layout="fill" />
+        <NextImage
+          src="/history-bg.png"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </div>
       <div className="w-full flex flex-col items-center">
         <h1 className="my-10 text-center text-white font-bold text-[50px]">

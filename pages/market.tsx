@@ -14,7 +14,12 @@ const Market: NextPage = () => {
   return (
     <>
       <div className="full-body fixed top-0 left-0 -z-40">
-        <NextImage src="/market-bg.png" className="w-[100%]" layout="fill" />
+        <NextImage
+          src="/market-bg.png"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </div>
       <div className="w-full flex flex-col items-center">
         <div className="w-1/2 bg-gray-500 rounded-[50px] py-7 px-auto bg-[url('/promote.png')] mb-10 min-w-[300px] bg-cover">

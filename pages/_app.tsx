@@ -46,9 +46,6 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         <Providers>
           <Layout>
             <ToastContainer />
-            <div className="full-body fixed top-0 left-0 -z-40">
-              <Image src="/earn-gold.png" className="w-[100%]" layout="fill" />
-            </div>
             <Component {...pageProps} />
           </Layout>
         </Providers>

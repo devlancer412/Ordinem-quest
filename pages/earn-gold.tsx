@@ -53,7 +53,12 @@ export default function EarnGold() {
   return (
     <>
       <div className="full-body fixed top-0 left-0 -z-40">
-        <Image src="/earn-gold-bg.png" className="w-[100%]" layout="fill" />
+        <Image
+          src="/earn-gold-bg.png"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
         <Tab.Group
