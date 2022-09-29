@@ -1,61 +1,24 @@
 import Link from "next/link";
-import axios from "axios";
-import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useSideNav } from "hooks/useSideNav";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Hamburger } from "../../icons/hamburger";
 import { Bell } from "../../icons/bell";
 import { ConnectWallet } from "../connectWallet/connectWallet";
-import { Transaction } from "@solana/web3.js";
-import { getCurrentUserData, updateUser } from "utils/firebase";
 
-export const Header = () => {
-  const { connected, publicKey, sendTransaction } =
-    useWallet();
-  const { connection } = useConnection();
+type Props = {
+  withdrawGold: () => void;
+}
+
+export const Header: React.FC<Props> = ({withdrawGold}) => {
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
     useState(false);
   const { setSideNav } = useSideNav();
-  const { setTokens } = useSolanaNfts();
 
   const handleConnectWalletDialogClose = () => {
     setConnectWalletDialogOpened(false);
   };
-
-  const withdrawGold = async () => {
-    if (!connected) {
-      console.error("not connected");
-      return;
-    }
-
-    const response = await axios.get(
-      `/api/get-withdraw-transaction?user_wallet=${publicKey.toBase58()}`
-    );
-
-    console.log(response.data)
-    if (response.data.status != 'ok') {
-      console.log(response.data.error);
-      return;
-    }
-
-    setTokens(0);
-    const tx = Transaction.from(
-      Buffer.from(response.data.data, "base64")
-    );
-    console.log(tx);
-    try {
-      const txId = await sendTransaction(tx, connection);
-
-      console.log('Transaction sent', txId);
-      const user = await getCurrentUserData();
-      updateUser(user._id, {
-        tokensWithdrawable: 0,
-      })
-      await connection.confirmTransaction(txId, 'confirmed');
-    } catch (err) { console.log(err) }
-  }
 
   return (
     <>
@@ -121,7 +84,7 @@ export const Header = () => {
 };
 
 
-let debounced;
+let debounced: any;
 const SearchComponent = () => {
   const { searchNfts } = useSolanaNfts();
 
