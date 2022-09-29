@@ -15,7 +15,11 @@ import { useSideNav } from "hooks/useSideNav";
 import { useWindowSize } from "hooks/useWindowSize";
 import TwitterInputLogin from "components/TwitterInputLogin";
 
-export const Sidenav = () => {
+type Props = {
+  withdrawGold: () => void;
+};
+
+export const Sidenav: React.FC<Props> = ({ withdrawGold }) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { show, close } = useSideNav();
@@ -156,7 +160,10 @@ export const Sidenav = () => {
           })}
           {width <= 530 && (
             <div className="flex justify-center mt-5">
-              <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold m-auto">
+              <button
+                className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold m-auto"
+                onClick={withdrawGold}
+              >
                 Withdraw Gold
               </button>
             </div>
