@@ -6,6 +6,9 @@ import React, { useState } from "react";
 import { Hamburger } from "../../icons/hamburger";
 import { Bell } from "../../icons/bell";
 import { ConnectWallet } from "../connectWallet/connectWallet";
+import { Transaction } from "@solana/web3.js";
+import { getCurrentUserData, updateUser } from "utils/firebase";
+import { useWindowSize } from "hooks/useWindowSize";
 
 type Props = {
   withdrawGold: () => void;
@@ -15,6 +18,8 @@ export const Header: React.FC<Props> = ({withdrawGold}) => {
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
     useState(false);
   const { setSideNav } = useSideNav();
+  const { setTokens } = useSolanaNfts();
+  const { width } = useWindowSize();
 
   const handleConnectWalletDialogClose = () => {
     setConnectWalletDialogOpened(false);
@@ -47,7 +52,7 @@ export const Header: React.FC<Props> = ({withdrawGold}) => {
             <SearchComponent />
           </div>
           <div className="flex items-center gap-3">
-            <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold" onClick={withdrawGold}>Withdraw Gold</button>
+            {width > 530 ? <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold" onClick={withdrawGold}>Withdraw Gold</button>: ""}
             <WalletMultiButton className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:!bg-[#b30000] hover:text-white h-10 px-4 font-bold"></WalletMultiButton>
             <button className="rounded-full bg-[#F1F1F1] text-[#7A797D] hover:bg-primary-900 h-10 px-2"><Bell /></button>
             {/* <div className="bg-white w-10 h-10 rounded-full flex justify-center items-center">

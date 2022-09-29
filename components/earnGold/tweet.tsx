@@ -15,6 +15,7 @@ import LoadingButton from "./LoadingButton";
 import SuccessPopup from "./SuccessPopup";
 import { Tweet as TweetWidget } from "react-twitter-widgets";
 import { useQuests } from "hooks/useQuests";
+import Image from "next/image";
 
 const Tweet = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -152,89 +153,92 @@ const Tweet = () => {
 
   return (
     <>
-      <div>
-        <div className="max-h-[20rem] mb-4 overflow-x-hidden overflow-y-scroll">
-          <div className="rounded-lg overflow-hidden">
-            <TweetWidget
-              tweetId={tweet_id}
-              onLoad={() => {
-                setIsTweetLoading(false);
-                setLoadTweet(false);
-              }}
-            />
+      <div className="relative py-24">
+        <Image src="/tweet-bg.png" className="w-[100%] -z-10" layout="fill" />
+        <div className="z-10">
+          <div className="max-h-[20rem] mb-4 overflow-x-hidden overflow-y-scroll">
+            <div className="flex justify-center rounded-lg overflow-hidden px-[23%]">
+              <TweetWidget
+                tweetId={tweet_id}
+                onLoad={() => {
+                  setIsTweetLoading(false);
+                  setLoadTweet(false);
+                }}
+              />
+            </div>
           </div>
-        </div>
-        {loadTweet && (
-          <div className="min-h-[10rem] w-full flex items-center justify-center text-center">
-            <h5 className="text-2xl">Loading tweet...</h5>
-          </div>
-        )}
-        {!isTweetLoading && (
-          <div className="flex flex-col gap-4 justify-stretch">
-            {!quotasEnded.like && (
-              <div className="flex items-center justify-between gap-4 w-full">
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://twitter.com/intent/like?tweet_id=${tweet_id}`}
-                  className="bg-blue-400 text-white px-5 py-2 rounded-lg"
-                >
-                  Like tweet
-                </a>
-                <div>
-                  {isVerified.like ? (
-                    <h5>Like verified</h5>
-                  ) : (
-                    <LoadingButton
-                      className={`${
-                        buttonClicked
-                          ? "pointer-events-none cursor-not-allowed"
-                          : ""
-                      }`}
-                      text="Verify Like"
-                      onClick={verifyLike}
-                    />
-                  )}
+          {loadTweet && (
+            <div className="min-h-[10rem] w-full flex items-center justify-center text-center">
+              <h5 className="text-2xl">Loading tweet...</h5>
+            </div>
+          )}
+          {!isTweetLoading && (
+            <div className="flex flex-col gap-4 justify-stretch mt-8">
+              {!quotasEnded.like && (
+                <div className="flex items-center justify-center gap-8 w-full">
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://twitter.com/intent/like?tweet_id=${tweet_id}`}
+                    className="text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#C62828] border-2 border-white drop-shadow-lg flex justify-center text-[20px] items-center"
+                  >
+                    Like
+                  </a>
+                  <div>
+                    {isVerified.like ? (
+                      <h5>Like verified</h5>
+                    ) : (
+                      <LoadingButton
+                        className={`${
+                          buttonClicked
+                            ? "pointer-events-none cursor-not-allowed"
+                            : ""
+                        } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
+                        text="Verify Like"
+                        onClick={verifyLike}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-            {!quotasEnded.comment && (
-              <div className="flex items-center justify-between gap-4 w-full">
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://twitter.com/intent/tweet?in_reply_to=${tweet_id}`}
-                  className="bg-blue-400 text-white px-5 py-2 rounded-lg"
-                >
-                  Comment tweet
-                </a>
-                <div>
-                  {isVerified.comment ? (
-                    <h5>Reply verified</h5>
-                  ) : (
-                    <LoadingButton
-                      className={`${
-                        buttonClicked
-                          ? "pointer-events-none cursor-not-allowed"
-                          : ""
-                      }`}
-                      text="Verify Comment"
-                      onClick={verifyReply}
-                    />
-                  )}
+              )}
+              {!quotasEnded.comment && (
+                <div className="flex items-center justify-center gap-8 w-full">
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://twitter.com/intent/tweet?in_reply_to=${tweet_id}`}
+                    className="text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#C62828] border-2 border-white drop-shadow-lg flex justify-center text-[20px] items-center"
+                  >
+                    Comment
+                  </a>
+                  <div>
+                    {isVerified.comment ? (
+                      <h5>Reply verified</h5>
+                    ) : (
+                      <LoadingButton
+                        className={`${
+                          buttonClicked
+                            ? "pointer-events-none cursor-not-allowed"
+                            : ""
+                        } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
+                        text="Verify Comment"
+                        onClick={verifyReply}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <LoadingButton
-              className={`${
-                buttonClicked ? "pointer-events-none cursor-not-allowed" : ""
-              }`}
-              text="Next"
-              onClick={changeTweet}
-            />
-          </div>
-        )}
+              <LoadingButton
+                className={`${
+                  buttonClicked ? "pointer-events-none cursor-not-allowed" : ""
+                }`}
+                text="Skip"
+                onClick={changeTweet}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

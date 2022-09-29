@@ -5,13 +5,19 @@ import { useEvents } from "hooks/useEvents";
 import { useModal } from "hooks/useModal";
 import { useTwitterUser } from "hooks/useTwitterUser";
 import { useEffect, useState } from "react";
-import { getCurrentUserData, updateNftXP, updateUser, updateUserData } from "utils/firebase";
+import {
+  getCurrentUserData,
+  updateNftXP,
+  updateUser,
+  updateUserData,
+} from "utils/firebase";
 import { updateQuests, deleteQuest } from "utils/firebase/quest";
 import { arrayUnion, increment, serverTimestamp } from "firebase/firestore";
 import { updateTokensToDB } from "utils/token";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useNotification } from "hooks/useNotification";
 import SuccessPopup from "./SuccessPopup";
+import { toast } from "react-toastify";
 
 const DailyQuest = () => {
   const { setModal } = useModal();
@@ -39,7 +45,9 @@ const DailyQuest = () => {
   };
 
   const verifyQuest = async (quest: Quest) => {
-    const tweetId = quest.link.split('/')[quest.link.split('/').length - 1].split('?')[0];
+    const tweetId = quest.link
+      .split("/")
+      [quest.link.split("/").length - 1].split("?")[0];
     console.log(tweetId);
     const result = await axios.get(
       `/api/verify-quest?user_id=${user.uid}&tweet_id=${tweetId}`
@@ -62,9 +70,17 @@ const DailyQuest = () => {
 
       load();
     } else {
-      console.log(result?.data?.message);
+      toast.error(result?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -74,7 +90,11 @@ const DailyQuest = () => {
           "Fetching Quests..."
         ) : (
           <>
-            {quests.filter((quest: Quest) => !user?.quests || user.quests.indexOf(quest._id) < 0)
+            {quests
+              .filter(
+                (quest: Quest) =>
+                  !user?.quests || user.quests.indexOf(quest._id) < 0
+              )
               .map((quest, index) => (
                 <div
                   key={index}
@@ -87,7 +107,10 @@ const DailyQuest = () => {
                     {quest.rewardAmount} Gold Available
                   </p>
                   <div className="absolute right-1 top-2 grid grid-cols-2 gap-1">
-                    <button className=" bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold text-center" onClick={() => verifyQuest(quest)}>
+                    <button
+                      className=" bg-white rounded-full py-[2px] px-[14px] text-red-700 text-[12px] uppercase font-bold text-center"
+                      onClick={() => verifyQuest(quest)}
+                    >
                       Verify
                     </button>
                     {user?.isAdmin ? (
