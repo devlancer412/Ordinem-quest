@@ -2,11 +2,12 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { NextPage } from "next";
 import NextImage from "next/image";
 import axios from "axios";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { clusterApiUrl, Connection, PublicKey, Transaction } from "@solana/web3.js";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { getCurrentUserData, updateUser } from "utils/firebase";
 import MysteryBoxModal from "components/modal/MysteryBoxModal";
 import { useModal } from "hooks/useModal";
+import { createTransferCheckedInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 type Item = {
   image: string;
@@ -25,11 +26,18 @@ const items: Item[] = [
   },
 ];
 
-const Market: NextPage = () => {  
+async function findAssociatedTokenAddress(
+  walletAddress: PublicKey,
+  tokenMintAddress: PublicKey
+): Promise<PublicKey> {
+  return await getAssociatedTokenAddress(tokenMintAddress, walletAddress);
+}
+
+const Market: NextPage = () => {
   const wallet = useWallet();
-  const {connection} = useConnection();
-  const {setModal} = useModal();
-  const {tokens, setTokens} = useSolanaNfts();
+  const { connection } = useConnection();
+  const { setModal } = useModal();
+  const { tokens, setTokens } = useSolanaNfts();
 
   const buyBox = async (item: Item) => {
     if (!wallet.connected) {
@@ -38,21 +46,56 @@ const Market: NextPage = () => {
     }
 
     const response = await axios.get(
-      `/api/buy-box?price=${item.price}&user_wallet=${(
+      `/api/get-buy-box?price=${item.price}&user_wallet=${(
         wallet.publicKey as PublicKey
       ).toBase58()}`
     );
 
-    console.log(response.data);
     if (response.data.status != "ok") {
-      console.log(response.data.error);
+      console.log(response.data.data);
       return;
     }
 
     if (response.data.needTx) {
       setTokens(0);
-      const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
-      console.log(tx);
+      const tx = new Transaction();
+
+      const mintAddress = new PublicKey(process.env.NEXT_PUBLIC_MINT_TOKEN_ADDRESS as string);
+
+      const fromAddress = wallet.publicKey as PublicKey;
+      const toAddress = new PublicKey(process.env.NEXT_PUBLIC_WALLET_ADDRESS as string);
+
+      const fromTokenAccount = await findAssociatedTokenAddress(
+        fromAddress,
+        mintAddress
+      );
+
+      const toTokenAccount = await findAssociatedTokenAddress(
+        toAddress,
+        mintAddress
+      );
+
+      const amount = response.data.restAmount * 10 ** 8;
+
+      console.log(mintAddress.toBase58())
+      tx.add(
+        createTransferCheckedInstruction(
+          fromTokenAccount,
+          mintAddress,
+          toTokenAccount,
+          fromAddress,
+          amount, // amount to transfer
+          8, // decimals of token
+          [],
+          TOKEN_PROGRAM_ID
+        )
+      );
+
+      const { blockhash } = await connection.getLatestBlockhash();
+
+      tx.feePayer = fromAddress;
+      tx.recentBlockhash = blockhash;
+
       try {
         const txId = await wallet.sendTransaction(tx, connection);
 

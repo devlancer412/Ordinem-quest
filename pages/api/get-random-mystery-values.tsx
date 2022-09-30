@@ -63,7 +63,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     
     for (let i = 0; i < 50; i++) {
         const random = 9 - Math.floor(Math.pow(between(1, 999), 1 / 3));
-        console.log('input', `${baseStr}${user_wallet}${rollbase}${random}`);
         const hashValue = crypto.createHash('sha256').update(`${baseStr}${user_wallet}${rollbase}${random}`).digest().toString('hex');
         const newItem = { ...availableItems[random], hash: hashValue };
         items.push(newItem);

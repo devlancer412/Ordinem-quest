@@ -78,7 +78,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
     }
 
-    console.log('result', `${baseStr}${user_wallet}${rollbase}${index}`);
     const hashValue = crypto.createHash('sha256').update(`${baseStr}${user_wallet}${rollbase}${index}`).digest().toString('hex');
 
     if (hashValue != hash) {
