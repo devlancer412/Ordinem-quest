@@ -32,4 +32,10 @@ declare global {
         creator?: string;
         [key: string]: any;
     }
+
+    type RollItem = {
+        type: 'Nothing' | 'Sol' | 'Gold';
+        amount: number;
+        hash?: string;
+    }
 }

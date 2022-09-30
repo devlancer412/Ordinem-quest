@@ -1,16 +1,77 @@
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { NextPage } from "next";
 import NextImage from "next/image";
+import axios from "axios";
+import { PublicKey, Transaction } from "@solana/web3.js";
+import { useSolanaNfts } from "hooks/useSolanaNfts";
+import { getCurrentUserData, updateUser } from "utils/firebase";
+import MysteryBoxModal from "components/modal/MysteryBoxModal";
+import { useModal } from "hooks/useModal";
 
-const items = [
+type Item = {
+  image: string;
+  name: string,
+  desc: string,
+  price: number,
+}
+
+const items: Item[] = [
   {
     image: "/market-item.png",
     name: "TREASURE CHEST",
-    description:
+    desc:
       "Feeling lucky? Take a gamble and test your luck by having a chance to win whitelist spots, solana, pricey nft's or even nothing!",
     price: 250,
   },
 ];
-const Market: NextPage = () => {
+
+const Market: NextPage = () => {  
+  const wallet = useWallet();
+  const {connection} = useConnection();
+  const {setModal} = useModal();
+  const {tokens, setTokens} = useSolanaNfts();
+
+  const buyBox = async (item: Item) => {
+    // if (!wallet.connected) {
+    //   console.error("not connected");
+    //   return;
+    // }
+
+    // const response = await axios.get(
+    //   `/api/buy-box?price=${item.price}&user_wallet=${(
+    //     wallet.publicKey as PublicKey
+    //   ).toBase58()}`
+    // );
+
+    // console.log(response.data);
+    // if (response.data.status != "ok") {
+    //   console.log(response.data.error);
+    //   return;
+    // }
+
+    // if (response.data.needTx) {
+    //   setTokens(0);
+    //   const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
+    //   console.log(tx);
+    //   try {
+    //     const txId = await wallet.sendTransaction(tx, connection);
+
+    //     console.log("Transaction sent", txId);
+    //     const user = await getCurrentUserData();
+    //     updateUser(user._id, {
+    //       tokensWithdrawable: 0,
+    //     });
+    //     await connection.confirmTransaction(txId, "confirmed");
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+
+    // setTokens(tokens - item.price);
+
+    setModal(true);
+  };
+
   return (
     <>
       <div className="full-body fixed top-0 left-0 -z-40">
@@ -27,22 +88,19 @@ const Market: NextPage = () => {
             Promote Tweet
           </h1>
         </div>
-        <ItemsComponent items={items} />
+        <ItemsComponent items={items} onBuy={buyBox} />
       </div>
+      <MysteryBoxModal />
     </>
   );
 };
 
 interface Props {
-  items: {
-    image: string;
-    name: string;
-    description: string;
-    price: number;
-  }[];
+  items: Item[];
+  onBuy: (item: Item) => void;
 }
 
-const ItemsComponent: React.FC<Props> = ({ items }) => {
+const ItemsComponent: React.FC<Props> = ({ items, onBuy }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-5 justify-items-center">
       {items &&
@@ -72,9 +130,9 @@ const ItemsComponent: React.FC<Props> = ({ items }) => {
             </div>
             <div>
               <h3 className="text-[18px] text-center py-1">{item.name}</h3>
-              <h5 className="text-[13px] text-center">{item.description}</h5>
+              <h5 className="text-[13px] text-center">{item.desc}</h5>
             </div>
-            <button className="bg-white text-black rounded-[12px] px-[16px] py-[14px] text-[14px] my-5 w-[120px] font-bold">
+            <button className="bg-white text-black rounded-[12px] px-[16px] py-[14px] text-[14px] my-5 w-[120px] font-bold" onClick={() => onBuy(item)}>
               Buy!
             </button>
           </div>
