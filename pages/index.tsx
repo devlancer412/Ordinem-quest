@@ -20,7 +20,12 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="full-body fixed top-0 left-0 -z-40">
-        <NextImage src="/knight-bg.png" className="w-[100%]" layout="fill" />
+        <NextImage
+          src="/knight-bg.png"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </div>
       <div>
         {(() => {
