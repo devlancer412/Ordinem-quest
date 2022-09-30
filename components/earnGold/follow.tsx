@@ -8,7 +8,7 @@ import { useQuests } from "hooks/useQuests";
 import { useTwitterUser } from "hooks/useTwitterUser";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { TwitterFollowButton } from "react-twitter-embed";
+// import { TwitterFollowButton } from "react-twitter-embed";
 import {
   getRandomUser,
   updateUser,
@@ -146,7 +146,7 @@ const Follow = () => {
           )}
 
           <div className="flex gap-3 items-center mt-6">
-            {/* <a
+            <a
               target="_blank"
               rel="noreferrer"
               href={`https://twitter.com/intent/follow?screen_name=${
@@ -155,8 +155,8 @@ const Follow = () => {
               className="flex justify-center bg-[#C62828] border-2 border-white text-white px-5 py-2 rounded-lg min-w-[130px] font-semibold"
             >
               Follow
-            </a> */}
-            <TwitterFollowButton screenName={user?.screenName} options={{ showScreenName: "false", showCount: false, showIcon: false}}/>
+            </a>
+            {/* <TwitterFollowButton screenName={user?.screenName} options={{ showScreenName: "false", showCount: false, showIcon: false}}/> */}
 
             {isVerified ? (
               <h4>Verified</h4>

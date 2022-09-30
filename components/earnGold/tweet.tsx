@@ -14,7 +14,7 @@ import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
 import SuccessPopup from "./SuccessPopup";
 import { Tweet as TweetWidget } from "react-twitter-widgets";
-import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
+// import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 import { useQuests } from "hooks/useQuests";
 import Image from "next/image";
 
