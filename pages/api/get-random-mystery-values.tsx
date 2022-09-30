@@ -19,11 +19,15 @@ const availableItems: RollItem[] = [
     },
     {
         type: 'Gold',
+        amount: 150,
+    },
+    {
+        type: 'Gold',
         amount: 200,
     },
     {
         type: 'Gold',
-        amount: 500,
+        amount: 250,
     },
     {
         type: 'Sol',
@@ -36,10 +40,6 @@ const availableItems: RollItem[] = [
     {
         type: 'Sol',
         amount: 2,
-    },
-    {
-        type: 'Sol',
-        amount: 5,
     },
 ]
 
