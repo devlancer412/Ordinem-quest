@@ -14,6 +14,7 @@ import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
 import SuccessPopup from "./SuccessPopup";
 import { Tweet as TweetWidget } from "react-twitter-widgets";
+import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 import { useQuests } from "hooks/useQuests";
 import Image from "next/image";
 
@@ -39,6 +40,7 @@ const Tweet = () => {
   const changeTweet = async () => {
     setButtonClicked(true);
     const changed = await fetchAndChangeTweet();
+    console.log(changed);
     if (changed) {
       setIsVerified({ like: false, comment: false, retweet: false });
       setLoadTweet(true);
@@ -165,6 +167,9 @@ const Tweet = () => {
                   setLoadTweet(false);
                 }}
               />
+              {/* <TwitterTweetEmbed
+                tweetId={tweet_id}
+              /> */}
             </div>
           </div>
           {loadTweet && (
@@ -189,11 +194,10 @@ const Tweet = () => {
                       <h5>Like verified</h5>
                     ) : (
                       <LoadingButton
-                        className={`${
-                          buttonClicked
+                        className={`${buttonClicked
                             ? "pointer-events-none cursor-not-allowed"
                             : ""
-                        } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
+                          } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
                         text="Verify Like"
                         onClick={verifyLike}
                       />
@@ -216,11 +220,10 @@ const Tweet = () => {
                       <h5>Reply verified</h5>
                     ) : (
                       <LoadingButton
-                        className={`${
-                          buttonClicked
+                        className={`${buttonClicked
                             ? "pointer-events-none cursor-not-allowed"
                             : ""
-                        } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
+                          } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
                         text="Verify Comment"
                         onClick={verifyReply}
                       />
@@ -230,9 +233,8 @@ const Tweet = () => {
               )}
 
               <LoadingButton
-                className={`${
-                  buttonClicked ? "pointer-events-none cursor-not-allowed" : ""
-                }`}
+                className={`${buttonClicked ? "pointer-events-none cursor-not-allowed" : ""
+                  }`}
                 text="Skip"
                 onClick={changeTweet}
               />
