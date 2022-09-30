@@ -32,42 +32,42 @@ const Market: NextPage = () => {
   const {tokens, setTokens} = useSolanaNfts();
 
   const buyBox = async (item: Item) => {
-    // if (!wallet.connected) {
-    //   console.error("not connected");
-    //   return;
-    // }
+    if (!wallet.connected) {
+      console.error("not connected");
+      return;
+    }
 
-    // const response = await axios.get(
-    //   `/api/buy-box?price=${item.price}&user_wallet=${(
-    //     wallet.publicKey as PublicKey
-    //   ).toBase58()}`
-    // );
+    const response = await axios.get(
+      `/api/buy-box?price=${item.price}&user_wallet=${(
+        wallet.publicKey as PublicKey
+      ).toBase58()}`
+    );
 
-    // console.log(response.data);
-    // if (response.data.status != "ok") {
-    //   console.log(response.data.error);
-    //   return;
-    // }
+    console.log(response.data);
+    if (response.data.status != "ok") {
+      console.log(response.data.error);
+      return;
+    }
 
-    // if (response.data.needTx) {
-    //   setTokens(0);
-    //   const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
-    //   console.log(tx);
-    //   try {
-    //     const txId = await wallet.sendTransaction(tx, connection);
+    if (response.data.needTx) {
+      setTokens(0);
+      const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
+      console.log(tx);
+      try {
+        const txId = await wallet.sendTransaction(tx, connection);
 
-    //     console.log("Transaction sent", txId);
-    //     const user = await getCurrentUserData();
-    //     updateUser(user._id, {
-    //       tokensWithdrawable: 0,
-    //     });
-    //     await connection.confirmTransaction(txId, "confirmed");
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }
+        console.log("Transaction sent", txId);
+        const user = await getCurrentUserData();
+        updateUser(user._id, {
+          tokensWithdrawable: 0,
+        });
+        await connection.confirmTransaction(txId, "confirmed");
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
-    // setTokens(tokens - item.price);
+    setTokens(tokens - item.price);
 
     setModal(true);
   };
