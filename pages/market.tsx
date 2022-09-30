@@ -61,9 +61,9 @@ const Market: NextPage = () => {
         updateUser(user._id, {
           tokensWithdrawable: 0,
         });
-        await connection.confirmTransaction(txId, "confirmed");
       } catch (err) {
         console.log(err);
+        return;
       }
     }
 
