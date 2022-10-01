@@ -124,11 +124,11 @@ const DailyQuest = () => {
                       <></>
                     )}
                   </div>
-                  <Link href={quest.link}>
+                  <a target="_blank" href={quest.link} rel="noopener noreferrer">
                     <button className="absolute bg-white rounded-tl-[16px]  py-1 px-4 right-0 bottom-0 text-gray-600 border-2 border-white font-bold">
                       Click here to join &gt;
                     </button>
-                  </Link>
+                  </a>
                 </div>
               ))}
             {user?.isAdmin ? (
