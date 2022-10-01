@@ -42,6 +42,7 @@ const Tweet = () => {
     const changed = await fetchAndChangeTweet();
     console.log(changed);
     if (changed) {
+      console.log("chnaged and set all default")
       setIsVerified({ like: false, comment: false, retweet: false });
       setLoadTweet(true);
       setButtonClicked(false);
@@ -65,6 +66,12 @@ const Tweet = () => {
       })();
     }
   }, [wallet]);
+
+  useEffect(() => {
+    if(isVerified.like && isVerified.comment) {
+      changeTweet();
+    }
+  }, [isVerified])
 
   const sendTokens = async (quest: string, amount?: number) => {
     if (!wallet) return;

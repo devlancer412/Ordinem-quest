@@ -144,7 +144,7 @@ export const fetchAndChangeTweet = async () => {
   const tweetData = result.data.data;
   if (!tweetData) {
     fetchAndChangeTweet();
-    return;
+    return true;
   }
 
   const likeVerify = await axios.get(
@@ -152,7 +152,7 @@ export const fetchAndChangeTweet = async () => {
   );
   if (likeVerify.data.data) {
     fetchAndChangeTweet();
-    return;
+    return true;
   }
 
   const replyVerify = await axios.get(
@@ -160,7 +160,7 @@ export const fetchAndChangeTweet = async () => {
   );
   if (replyVerify.data.data) {
     fetchAndChangeTweet();
-    return;
+    return true;
   }
 
   if (tweetData && tweetData.id_str) {
