@@ -53,6 +53,10 @@ const Follow = () => {
     debounceCallback = setTimeout(fetchUsers, 1000);
   }, [wallet]);
 
+  useEffect(() => {
+    setIsVerified(false);
+  }, [indexOfUser]);
+
   const verifyUserFollow = async () => {
     if (!isVerifying) {
       setIsVerifying(true);
