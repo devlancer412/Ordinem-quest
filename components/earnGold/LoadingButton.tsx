@@ -20,7 +20,7 @@ const LoadingButton: FC<ButtonProps> = ({ onClick, className, text }) => {
         }
       }}
       className={`bg-none text-white px-5 min-w-[5rem] py-2 rounded-lg duration-75 font-semibold ${className} ${
-        isVerifying && "opacity-60 pointer-events-none"
+        isVerifying ? "opacity-60 pointer-events-none":""      
       }`}
     >
       {isVerifying ? <Spinner /> : text}

@@ -160,6 +160,7 @@ const Tweet = () => {
       </div>
     );
 
+console.log(buttonClicked);
   return (
     <>
       <div className="relative py-24">
@@ -240,7 +241,7 @@ const Tweet = () => {
               )}
 
               <LoadingButton
-                className={`${buttonClicked ? "pointer-events-none cursor-not-allowed" : ""
+                className={`${buttonClicked ? "pointer-events-none cursor-not-allowed z-10" : "z-10"
                   }`}
                 text="Skip"
                 onClick={changeTweet}
