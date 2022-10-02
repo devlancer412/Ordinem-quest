@@ -101,6 +101,12 @@ export async function getNftFromMint(mint: string) {
   )[0];
 }
 
+export async function getNftsFromAddress(address: string) {
+  return getData(
+    await getDocs(query(nftCollection, where("wallet", "==", address)))
+  );
+}
+
 export async function getAllUsers() {
   return getData(
     await getDocs(
