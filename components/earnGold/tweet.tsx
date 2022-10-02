@@ -6,6 +6,7 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import { useEffect, useState } from "react";
 import {
   fetchAndChangeTweet,
+  getCurrentUserData,
   getRandomTweet,
   updateNftXP,
   updateUserData,
@@ -40,9 +41,7 @@ const Tweet = () => {
   const changeTweet = async () => {
     setButtonClicked(true);
     const changed = await fetchAndChangeTweet();
-    console.log(changed);
     if (changed) {
-      console.log("chnaged and set all default")
       setIsVerified({ like: false, comment: false, retweet: false });
       setLoadTweet(true);
       setButtonClicked(false);
@@ -51,7 +50,7 @@ const Tweet = () => {
   };
 
   useEffect(() => {
-    if (wallet && currentUser && !tweet_id.length) {
+    if (wallet && currentUser) {
       (async () => {
         setIsLoading(true);
         try {
@@ -68,7 +67,7 @@ const Tweet = () => {
   }, [wallet]);
 
   useEffect(() => {
-    if(isVerified.like && isVerified.comment) {
+    if (isVerified.like && isVerified.comment) {
       changeTweet();
     }
   }, [isVerified])
@@ -89,11 +88,17 @@ const Tweet = () => {
     try {
       setButtonClicked(true);
       const currentUserId = currentUser?.providerData[0].uid;
+      const userFromDB = await getCurrentUserData();
+
+      if (userFromDB.likes.indexOf(tweet_id) >= 0) {
+        setIsVerified((state) => ({ ...state, like: true }));
+        setButtonClicked(false);
+        return;
+      }
+
       const result = await axios.get(
         `/api/verify-like?user_id=${currentUserId}&tweet_id=${tweet_id}`
       );
-
-      console.log(result.data.data);
 
       if (result.data.data === true) {
         setIsVerified((state) => ({ ...state, like: true }));
@@ -117,6 +122,14 @@ const Tweet = () => {
     try {
       setButtonClicked(true);
       const currentUserId = currentUser?.providerData[0].uid;
+      const userFromDB = await getCurrentUserData();
+
+      if (userFromDB.replies.indexOf(tweet_id) >= 0) {
+        setIsVerified((state) => ({ ...state, comment: true }));
+        setButtonClicked(false);
+        return;
+      }
+
       const result = await axios.get(
         `/api/verify-reply?user_id=${currentUserId}&tweet_id=${tweet_id}`
       );
@@ -160,7 +173,6 @@ const Tweet = () => {
       </div>
     );
 
-console.log(buttonClicked);
   return (
     <>
       <div className="relative py-24">
@@ -200,8 +212,8 @@ console.log(buttonClicked);
                     ) : (
                       <LoadingButton
                         className={`${buttonClicked
-                            ? "pointer-events-none cursor-not-allowed"
-                            : ""
+                          ? "pointer-events-none cursor-not-allowed"
+                          : ""
                           } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
                         text="Verify Like"
                         onClick={verifyLike}
@@ -226,8 +238,8 @@ console.log(buttonClicked);
                     ) : (
                       <LoadingButton
                         className={`${buttonClicked
-                            ? "pointer-events-none cursor-not-allowed"
-                            : ""
+                          ? "pointer-events-none cursor-not-allowed"
+                          : ""
                           } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
                         text="Verify Comment"
                         onClick={verifyReply}
