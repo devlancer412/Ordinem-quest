@@ -40,9 +40,7 @@ const SelectKnightModal = () => {
                         <div
                           className={`h-full bg-green-400`}
                           style={{
-                            width: `${
-                              (nft.XP ? nft.XP : 0) / (nft.level + 1)
-                            }%`,
+                            width: `${(nft.XP ? nft.XP : 0) / (nft.level + 1)}%`,
                           }}
                         ></div>
                       </div>
