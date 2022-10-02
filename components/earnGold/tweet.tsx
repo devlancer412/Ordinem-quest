@@ -175,9 +175,6 @@ console.log(buttonClicked);
                   setLoadTweet(false);
                 }}
               />
-              {/* <TwitterTweetEmbed
-                tweetId={tweet_id}
-              /> */}
             </div>
           </div>
           {loadTweet && (
