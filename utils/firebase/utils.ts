@@ -73,13 +73,14 @@ export async function updateNftXP(amount: number) {
 
   const nft = nfts[selectedNft];
 
-  if (!nft.XP || Number(nft?.XP) + amount < (nft.level + 1) * 100) {
+  if (!nft.XP || nft?.XP + amount < (nft.level + 1) * 100) {
     await updateNFT(nft._id, {
       XP: increment(amount),
     });
     return;
   }
 
+  console.log("updateing nft level");
   updateNFT(nft._id, {
     XP: increment(amount),
     level: increment(1),

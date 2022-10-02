@@ -6,6 +6,7 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import Image from "components/Image";
 import NextImage from "next/image";
+import { getCurrentUserData } from "utils/firebase";
 
 const Home: NextPage = () => {
   const { nfts } = useSolanaNfts();
