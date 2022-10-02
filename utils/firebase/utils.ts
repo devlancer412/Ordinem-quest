@@ -75,7 +75,7 @@ export async function updateNftXP(amount: number) {
 
   const currentXP = nft.XP??0;
 
-  updateNFT(nft._id, {
+  await updateNFT(nft._id, {
     XP: increment(amount),
     level: Math.floor((currentXP + amount)/100),
   });
