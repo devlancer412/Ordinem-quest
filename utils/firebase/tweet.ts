@@ -143,24 +143,21 @@ export const fetchAndChangeTweet = async () => {
   );
   const tweetData = result.data.data;
   if (!tweetData) {
-    fetchAndChangeTweet();
-    return true;
+    return false;
   }
 
   const likeVerify = await axios.get(
     `/api/verify-like?user_id=${currentUserId}&tweet_id=${tweetData.id_str}`
   );
   if (likeVerify.data.data) {
-    fetchAndChangeTweet();
-    return true;
+    false;
   }
 
   const replyVerify = await axios.get(
     `/api/verify-reply?user_id=${currentUserId}&tweet_id=${tweetData.id_str}`
   );
   if (replyVerify.data.data) {
-    fetchAndChangeTweet();
-    return true;
+    return false;
   }
 
   if (tweetData && tweetData.id_str) {
@@ -168,6 +165,6 @@ export const fetchAndChangeTweet = async () => {
 
     return true;
   } else {
-    fetchAndChangeTweet();
+    return false;
   }
 };

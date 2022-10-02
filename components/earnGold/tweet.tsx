@@ -36,17 +36,23 @@ const Tweet = () => {
   const walletContextState = useWallet();
 
   const { openNotification } = useNotification();
-  const { tweet_id, quotasEnded } = useQuests();
+  const { tweet_id, quotasEnded, setTweet } = useQuests();
 
   const changeTweet = async () => {
     setButtonClicked(true);
-    const changed = await fetchAndChangeTweet();
-    if (changed) {
-      setIsVerified({ like: false, comment: false, retweet: false });
-      setLoadTweet(true);
-      setButtonClicked(false);
-      setIsTweetLoading(true);
+    
+    for(let i=0; i < 30; i++) {
+      const changed = await fetchAndChangeTweet();
+      if (changed) {
+        setIsVerified({ like: false, comment: false, retweet: false });
+        setLoadTweet(true);
+        setButtonClicked(false);
+        setIsTweetLoading(true);
+        return;
+      }
     }
+
+    setTweet('');
   };
 
   useEffect(() => {
@@ -90,7 +96,7 @@ const Tweet = () => {
       const currentUserId = currentUser?.providerData[0].uid;
       const userFromDB = await getCurrentUserData();
 
-      if (userFromDB.likes.indexOf(tweet_id) >= 0) {
+      if (userFromDB.likes && userFromDB.likes?.indexOf(tweet_id) >= 0) {
         setIsVerified((state) => ({ ...state, like: true }));
         setButtonClicked(false);
         return;
@@ -124,7 +130,7 @@ const Tweet = () => {
       const currentUserId = currentUser?.providerData[0].uid;
       const userFromDB = await getCurrentUserData();
 
-      if (userFromDB.replies.indexOf(tweet_id) >= 0) {
+      if (userFromDB.replies && userFromDB.replies?.indexOf(tweet_id) >= 0) {
         setIsVerified((state) => ({ ...state, comment: true }));
         setButtonClicked(false);
         return;
