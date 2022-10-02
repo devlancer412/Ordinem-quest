@@ -27,7 +27,7 @@ const PersonalState = () => {
       <div className="flex flex-col h-[160px] justify-between text-white text-center items-center font-bold leading-[150%]">
         <h5 className="text-[25px]">Total Gold Earned</h5>
         <h1 className="text-[100px] leading-none">
-          {user?.tokensEarned}
+          {user?.tokensEarned ?? 0}
         </h1>
       </div>
     </div>
