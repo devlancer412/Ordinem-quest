@@ -15,7 +15,7 @@ const GlobalState = () => {
       const users = await getAllUsers();
       setUsers(users.sort((a, b) => (
         (b?.followCount ?? 0) + (b?.likeCount ?? 0) + (b?.replyCount ?? 0)) - 
-        ((a?.followCount ?? 0) + (a?.likeCount ?? 0) + (a?.replyCount ?? 0))));
+        ((a?.followCount ?? 0) + (a?.likeCount ?? 0) + (a?.replyCount ?? 0))).slice(0, 10));
     })();
   }, []);
 
