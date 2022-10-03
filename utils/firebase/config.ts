@@ -19,3 +19,4 @@ export const db = getFirestore(app);
 export const userCollection = collection(db, "users");
 export const nftCollection = collection(db, "nfts");
 export const questCollection = collection(db, "quests");
+export const notificationCollection = collection(db, "notifications");
