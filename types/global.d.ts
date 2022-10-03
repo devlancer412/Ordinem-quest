@@ -33,6 +33,11 @@ declare global {
         [key: string]: any;
     }
 
+    type Notification = {
+        questId: string,
+        userId: string
+    }
+    
     type RollItem = {
         type: 'Nothing' | 'Sol' | 'Gold';
         amount: number;

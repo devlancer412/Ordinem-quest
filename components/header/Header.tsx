@@ -9,12 +9,20 @@ import { ConnectWallet } from "../connectWallet/connectWallet";
 import { Transaction } from "@solana/web3.js";
 import { getCurrentUserData, updateUser } from "utils/firebase";
 import { useWindowSize } from "hooks/useWindowSize";
+import { Popover } from "@headlessui/react";
+import { useEvents } from "hooks/useEvents";
+import { Timestamp } from "@firebase/firestore";
+import TimeAgo from "react-timeago";
+import enStrings from "react-timeago/lib/language-strings/en";
+import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
 type Props = {
   withdrawGold: () => void;
-}
+};
 
-export const Header: React.FC<Props> = ({withdrawGold}) => {
+const notifications = [];
+
+export const Header: React.FC<Props> = ({ withdrawGold }) => {
   const [connectWalletDialogOpened, setConnectWalletDialogOpened] =
     useState(false);
   const { setSideNav } = useSideNav();
@@ -24,6 +32,9 @@ export const Header: React.FC<Props> = ({withdrawGold}) => {
   const handleConnectWalletDialogClose = () => {
     setConnectWalletDialogOpened(false);
   };
+
+  const { quests } = useEvents();
+  const formatter = buildFormatter(enStrings);
 
   return (
     <>
@@ -52,9 +63,56 @@ export const Header: React.FC<Props> = ({withdrawGold}) => {
             <SearchComponent />
           </div>
           <div className="flex items-center gap-3">
-            {width > 530 ? <button className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold" onClick={withdrawGold}>Withdraw Gold</button>: ""}
+            {width > 530 ? (
+              <button
+                className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:bg-primary-900 hover:text-white h-10 px-4 font-bold"
+                onClick={withdrawGold}
+              >
+                Withdraw Gold
+              </button>
+            ) : (
+              ""
+            )}
             <WalletMultiButton className="text-sm rounded-full bg-[#F1F1F1] text-[#DF245C] hover:!bg-[#b30000] hover:text-white h-10 px-4 font-bold"></WalletMultiButton>
-            <button className="rounded-full bg-[#F1F1F1] text-[#7A797D] hover:bg-primary-900 h-10 px-2"><Bell /></button>
+            <Popover className="relative">
+              <Popover.Button className="rounded-full bg-[#F1F1F1] text-[#7A797D] hover:bg-primary-900 h-10 px-2 outline-0">
+                <Bell />
+              </Popover.Button>
+
+              <Popover.Panel className="absolute z-50 flex flex-col right-0 notification-panel top-[calc(100%+10px)] w-[400px]">
+                <div className="bg-white border-b-2 border-[#D9D8D8] px-3 py-3 font-bold text-[14px] text-black ">
+                  Community Notification
+                </div>
+                <div className="bg-white h-[200px] px-2 py-2 flex flex-col gap-2">
+                  {quests.length == 0 && (
+                    <div className="h-full w-full flex justify-center items-center text-center">
+                      <h5 className="text-[12px] text-[#747475]">
+                        You don’t have any notifications.
+                      </h5>
+                    </div>
+                  )}
+                  {quests.length > 0 &&
+                    quests.map((quest, index) => (
+                      <div
+                        className="w-full text-black border-emerald-300	 border-l-[5px] px-2 py-1"
+                        key={index}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>{quest.title}</div>
+                          <TimeAgo
+                            formatter={formatter}
+                            date={quest.createdTime.toDate()}
+                            className="text-[12px]"
+                          />
+                        </div>
+                        <div>
+                          Complete raid now for {quest.rewardAmount} gold
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </Popover.Panel>
+            </Popover>
             {/* <div className="bg-white w-10 h-10 rounded-full flex justify-center items-center">
               <svg
                 className="w-6 h-6 text-dark-text-700"
@@ -87,7 +145,6 @@ export const Header: React.FC<Props> = ({withdrawGold}) => {
     </>
   );
 };
-
 
 let debounced: any;
 const SearchComponent = () => {
