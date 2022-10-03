@@ -7,7 +7,7 @@ import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { getCurrentUserData, updateUser } from "utils/firebase";
 import MysteryBoxModal from "components/modal/MysteryBoxModal";
 import { useModal } from "hooks/useModal";
-import { createTransferCheckedInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { createTransferCheckedInstruction, getAssociatedTokenAddress } from "@solana/spl-token";
 import { myLoader } from "utils/constants";
 
 type Item = {
@@ -78,7 +78,6 @@ const Market: NextPage = () => {
 
       const amount = response.data.restAmount * 10 ** 8;
 
-      console.log(mintAddress.toBase58())
       tx.add(
         createTransferCheckedInstruction(
           fromTokenAccount,
@@ -87,22 +86,20 @@ const Market: NextPage = () => {
           fromAddress,
           amount, // amount to transfer
           8, // decimals of token
-          [],
-          TOKEN_PROGRAM_ID
         )
       );
-
-      const { blockhash } = await connection.getLatestBlockhash();
+      const mconnection = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
+      const { blockhash } = await mconnection.getLatestBlockhash();
 
       tx.feePayer = fromAddress;
       tx.recentBlockhash = blockhash;
 
       try {
-        const txId = await wallet.sendTransaction(tx, connection);
+        const txId = await wallet.sendTransaction(tx, mconnection);
 
         console.log("Transaction sent", txId);
         const user = await getCurrentUserData();
-        updateUser(user._id, {
+        await updateUser(user._id, {
           tokensWithdrawable: 0,
         });
       } catch (err) {
