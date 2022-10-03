@@ -61,7 +61,7 @@ const NftsComponent = () => {
             <div className="mb-4 flex flex-col px-4 py-2">
               <NextImage
                 className="overflow-hidden rounded-lg"
-                src={nft.image}
+                src={nft.image.toLowerCase()}
                 alt={nft.name}
                 width={400}
                 height={400}

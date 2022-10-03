@@ -165,7 +165,7 @@ const ItemsComponent: React.FC<Props> = ({ items, onBuy }) => {
             <div className="flex flex-col pt-5">
               <NextImage
                 className="overflow-hidden rounded-lg"
-                src={item.image}
+                src={item.image.toLowerCase()}
                 alt={item.name}
                 width="212px"
                 height="212px"
