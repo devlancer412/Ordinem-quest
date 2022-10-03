@@ -31,6 +31,7 @@ module.exports = withBundleAnalyzer({
   },
   images: {
     domains: ["ipfs.io", "pbs.twimg.com"],
+    loader: 'imgix',
   },
   future: {
     webpack5: true,

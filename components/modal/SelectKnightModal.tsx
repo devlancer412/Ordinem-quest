@@ -30,7 +30,7 @@ const SelectKnightModal = () => {
                   <div className="flex flex-col items-center bg-[#9E162180] rounded-[20px] py-[20px] px-[10px] border-white border">
                     <NextImage
                       className="max-h-72 min-h-[15rem] overflow-hidden rounded-lg h-full object-cover"
-                      src={nft.image.toLowerCase()}
+                      src={nft.image}
                       alt={nft.name}
                       width={400}
                       height={400}
