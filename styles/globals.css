@@ -66,6 +66,18 @@
   border-radius: 20px;
 }
 
+.notification-panel::after {
+  position: absolute;
+  content: "";
+  border-style: solid;
+  border-width: 10px 10px 10px 10px;
+  border-color: transparent transparent white transparent;
+  top:-20px;
+  right: 10px;
+  width: 20px;
+  height:20px;
+}
+
 .blur-background img {
   @apply relative;
 }

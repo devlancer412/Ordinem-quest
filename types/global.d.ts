@@ -32,4 +32,9 @@ declare global {
         creator?: string;
         [key: string]: any;
     }
+
+    type Notification = {
+        questId: string,
+        userId: string
+    }
 }
