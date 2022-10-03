@@ -6,6 +6,7 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import { useEffect, useState } from "react";
 import {
   fetchAndChangeTweet,
+  getCurrentUserData,
   getRandomTweet,
   updateNftXP,
   updateUserData,
@@ -14,6 +15,7 @@ import { updateTokensToDB } from "utils/token";
 import LoadingButton from "./LoadingButton";
 import SuccessPopup from "./SuccessPopup";
 import { Tweet as TweetWidget } from "react-twitter-widgets";
+// import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 import { useQuests } from "hooks/useQuests";
 import Image from "next/image";
 
@@ -34,21 +36,27 @@ const Tweet = () => {
   const walletContextState = useWallet();
 
   const { openNotification } = useNotification();
-  const { tweet_id, quotasEnded } = useQuests();
+  const { tweet_id, quotasEnded, setTweet } = useQuests();
 
   const changeTweet = async () => {
     setButtonClicked(true);
-    const changed = await fetchAndChangeTweet();
-    if (changed) {
-      setIsVerified({ like: false, comment: false, retweet: false });
-      setLoadTweet(true);
-      setButtonClicked(false);
-      setIsTweetLoading(true);
+    
+    for(let i=0; i < 30; i++) {
+      const changed = await fetchAndChangeTweet();
+      if (changed) {
+        setIsVerified({ like: false, comment: false, retweet: false });
+        setLoadTweet(true);
+        setButtonClicked(false);
+        setIsTweetLoading(true);
+        return;
+      }
     }
+
+    setTweet('');
   };
 
   useEffect(() => {
-    if (wallet && currentUser && !tweet_id.length) {
+    if (wallet && currentUser) {
       (async () => {
         setIsLoading(true);
         try {
@@ -63,6 +71,12 @@ const Tweet = () => {
       })();
     }
   }, [wallet]);
+
+  useEffect(() => {
+    if (isVerified.like && isVerified.comment) {
+      changeTweet();
+    }
+  }, [isVerified])
 
   const sendTokens = async (quest: string, amount?: number) => {
     if (!wallet) return;
@@ -80,11 +94,17 @@ const Tweet = () => {
     try {
       setButtonClicked(true);
       const currentUserId = currentUser?.providerData[0].uid;
+      const userFromDB = await getCurrentUserData();
+
+      if (userFromDB.likes && userFromDB.likes?.indexOf(tweet_id) >= 0) {
+        setIsVerified((state) => ({ ...state, like: true }));
+        setButtonClicked(false);
+        return;
+      }
+
       const result = await axios.get(
         `/api/verify-like?user_id=${currentUserId}&tweet_id=${tweet_id}`
       );
-
-      console.log(result.data.data);
 
       if (result.data.data === true) {
         setIsVerified((state) => ({ ...state, like: true }));
@@ -108,6 +128,14 @@ const Tweet = () => {
     try {
       setButtonClicked(true);
       const currentUserId = currentUser?.providerData[0].uid;
+      const userFromDB = await getCurrentUserData();
+
+      if (userFromDB.replies && userFromDB.replies?.indexOf(tweet_id) >= 0) {
+        setIsVerified((state) => ({ ...state, comment: true }));
+        setButtonClicked(false);
+        return;
+      }
+
       const result = await axios.get(
         `/api/verify-reply?user_id=${currentUserId}&tweet_id=${tweet_id}`
       );
@@ -189,11 +217,10 @@ const Tweet = () => {
                       <h5>Like verified</h5>
                     ) : (
                       <LoadingButton
-                        className={`${
-                          buttonClicked
-                            ? "pointer-events-none cursor-not-allowed"
-                            : ""
-                        } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
+                        className={`${buttonClicked
+                          ? "pointer-events-none cursor-not-allowed"
+                          : ""
+                          } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
                         text="Verify Like"
                         onClick={verifyLike}
                       />
@@ -216,11 +243,10 @@ const Tweet = () => {
                       <h5>Reply verified</h5>
                     ) : (
                       <LoadingButton
-                        className={`${
-                          buttonClicked
-                            ? "pointer-events-none cursor-not-allowed"
-                            : ""
-                        } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
+                        className={`${buttonClicked
+                          ? "pointer-events-none cursor-not-allowed"
+                          : ""
+                          } text-white rounded-[16px] min-w-[130px] max-w-[130px] h-[65px] bg-[#454545] border-2 border-white drop-shadow-lg flex justify-center text-[20px] font-normal items-center`}
                         text="Verify Comment"
                         onClick={verifyReply}
                       />
@@ -230,9 +256,8 @@ const Tweet = () => {
               )}
 
               <LoadingButton
-                className={`${
-                  buttonClicked ? "pointer-events-none cursor-not-allowed" : ""
-                }`}
+                className={`${buttonClicked ? "pointer-events-none cursor-not-allowed z-10" : "z-10"
+                  }`}
                 text="Skip"
                 onClick={changeTweet}
               />

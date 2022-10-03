@@ -6,6 +6,8 @@ import { useTwitterUser } from "hooks/useTwitterUser";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import Image from "components/Image";
 import NextImage from "next/image";
+import { getCurrentUserData } from "utils/firebase";
+import { myLoader } from "utils/constants";
 
 const Home: NextPage = () => {
   const { nfts } = useSolanaNfts();
@@ -64,6 +66,7 @@ const NftsComponent = () => {
                 alt={nft.name}
                 width={400}
                 height={400}
+                loader={myLoader}
               />
 
               <div className="flex gap-3 items-center mt-2 justify-center">
@@ -93,6 +96,7 @@ const NftsComponent = () => {
                       <Image
                         src={user.profile_image}
                         alt={user.displayName as string}
+                        loader={myLoader}
                       />
                     )}
                   </div>

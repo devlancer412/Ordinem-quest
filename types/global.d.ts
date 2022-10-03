@@ -37,4 +37,10 @@ declare global {
         questId: string,
         userId: string
     }
+    
+    type RollItem = {
+        type: 'Nothing' | 'Sol' | 'Gold';
+        amount: number;
+        hash?: string;
+    }
 }

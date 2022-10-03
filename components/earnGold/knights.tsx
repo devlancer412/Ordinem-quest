@@ -1,4 +1,3 @@
-import NextImage from "next/image";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import { useModal } from "hooks/useModal";
 import SelectKnightModal from "components/modal/SelectKnightModal";

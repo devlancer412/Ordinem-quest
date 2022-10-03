@@ -1,6 +1,7 @@
 import NextImage from "next/image";
 import { useSolanaNfts } from "hooks/useSolanaNfts";
 import ModalWrapper from "./ModalWrapper";
+import { myLoader } from "utils/constants";
 
 const SelectKnightModal = () => {
   const { nfts, selectedNft, setSelected } = useSolanaNfts();
@@ -34,15 +35,14 @@ const SelectKnightModal = () => {
                       alt={nft.name}
                       width={400}
                       height={400}
+                      loader={myLoader}
                     />
                     <div className="flex gap-2 items-center mt-2 px-[5px]">
                       <div className="rounded-full min-w-[4rem] w-1/2 h-2 border border-gray-300">
                         <div
                           className={`h-full bg-green-400`}
                           style={{
-                            width: `${
-                              (nft.XP ? nft.XP : 0) / (nft.level + 1)
-                            }%`,
+                            width: `${(nft.XP ? nft.XP : 0) / (nft.level + 1)}%`,
                           }}
                         ></div>
                       </div>

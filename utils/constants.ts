@@ -1,6 +1,9 @@
+import { ImageLoader } from "next/image";
+
 export const SOLANA_API_KEY = process.env.NEXT_PUBLIC_MORALIS_SOLANA_API_KEY;
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK ?? "devnet";
 export const rpcEndpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT ?? '';
+export const baseStr = process.env.NEXT_PUBLIC_PRIVATE_HASH ?? '';
 
 export const calculateLevels = (nftCount: number) => {
   switch (nftCount) {
@@ -27,3 +30,7 @@ export const getCurrentTime = async () => {
   const data = await response.json();
   return new Date(data.datetime);
 };
+
+export const myLoader: ImageLoader = ({ src, width, quality }) => {
+  return `${src}`
+}

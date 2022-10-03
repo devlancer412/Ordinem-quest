@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import {
   getCurrentUserData,
   updateNftXP,
-  updateUser,
   updateUserData,
 } from "utils/firebase";
 import { updateQuests, deleteQuest } from "utils/firebase/quest";
@@ -18,6 +17,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useNotification } from "hooks/useNotification";
 import SuccessPopup from "./SuccessPopup";
 import { toast } from "react-toastify";
+import { PublicKey } from "@solana/web3.js";
 
 const DailyQuest = () => {
   const { setModal } = useModal();
@@ -59,10 +59,12 @@ const DailyQuest = () => {
         quests: arrayUnion(quest?._id),
         questCount: increment(1),
         lastQuested: serverTimestamp(),
-        tokensEarned: increment(quest.rewardAmount),
-        tokensWithdrawable: increment(quest.rewardAmount),
       });
       await updateNftXP(10 * quest.rewardAmount);
+      await updateTokensToDB(
+        (wallet.publicKey as PublicKey).toString(),
+        quest.rewardAmount ?? 5
+      );
 
       openNotification(() => (
         <SuccessPopup goldRecieved={quest.rewardAmount} quest="follow" />
@@ -124,11 +126,11 @@ const DailyQuest = () => {
                       <></>
                     )}
                   </div>
-                  <Link href={quest.link}>
+                  <a target="_blank" href={quest.link} rel="noopener noreferrer">
                     <button className="absolute bg-white rounded-tl-[16px]  py-1 px-4 right-0 bottom-0 text-gray-600 border-2 border-white font-bold">
                       Click here to join &gt;
                     </button>
-                  </Link>
+                  </a>
                 </div>
               ))}
             {user?.isAdmin ? (

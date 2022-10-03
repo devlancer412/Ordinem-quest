@@ -14,6 +14,7 @@ import SignInWithTwitter from "components/buttons/SignInWithTwitter";
 import { useSideNav } from "hooks/useSideNav";
 import { useWindowSize } from "hooks/useWindowSize";
 import TwitterInputLogin from "components/TwitterInputLogin";
+import { myLoader } from "utils/constants";
 
 type Props = {
   withdrawGold: () => void;
@@ -206,6 +207,7 @@ const TwitterCard = () => {
             height="50px"
             alt="follow"
             layout="fixed"
+            loader={myLoader}
           />
         </div>
         <p className="text-base text-white">

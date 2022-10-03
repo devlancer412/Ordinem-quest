@@ -73,16 +73,11 @@ export async function updateNftXP(amount: number) {
 
   const nft = nfts[selectedNft];
 
-  if (!nft.XP || Number(nft?.XP) + amount < (nft.level + 1) * 100) {
-    await updateNFT(nft._id, {
-      XP: increment(amount),
-    });
-    return;
-  }
+  const currentXP = nft.XP??0;
 
-  updateNFT(nft._id, {
+  await updateNFT(nft._id, {
     XP: increment(amount),
-    level: increment(1),
+    level: Math.floor((currentXP + amount)/100),
   });
   await updateNfts();
 }
@@ -104,6 +99,12 @@ export async function getNftFromMint(mint: string) {
   return getData(
     await getDocs(query(nftCollection, where("mint", "==", mint)))
   )[0];
+}
+
+export async function getNftsFromAddress(address: string) {
+  return getData(
+    await getDocs(query(nftCollection, where("wallet", "==", address)))
+  );
 }
 
 export async function getAllUsers() {
