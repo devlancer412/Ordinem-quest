@@ -97,7 +97,7 @@ export const Header: React.FC<Props> = ({ withdrawGold }) => {
                         <div className="flex justify-between items-center">
                           <div>{quest.title}</div>
                           <TimeAgo
-                            date={quest.createdTime.toDate()}
+                            date={new Date(quest.createdTime as string)}
                             className="text-[12px]"
                           />
                         </div>
