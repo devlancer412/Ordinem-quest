@@ -1,3 +1,5 @@
+import { ImageLoader } from "next/image";
+
 export const SOLANA_API_KEY = process.env.NEXT_PUBLIC_MORALIS_SOLANA_API_KEY;
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK ?? "devnet";
 export const rpcEndpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT ?? '';
@@ -29,6 +31,6 @@ export const getCurrentTime = async () => {
   return new Date(data.datetime);
 };
 
-// export const myLoader = ({ src: string, width: number, quality: number }) => {
-//   return `https://example.com/${src}?w=${width}&q=${quality || 75}`
-// }
+export const myLoader: ImageLoader = ({ src, width, quality }) => {
+  return `${src}`
+}

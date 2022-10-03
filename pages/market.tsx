@@ -8,6 +8,7 @@ import { getCurrentUserData, updateUser } from "utils/firebase";
 import MysteryBoxModal from "components/modal/MysteryBoxModal";
 import { useModal } from "hooks/useModal";
 import { createTransferCheckedInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { myLoader } from "utils/constants";
 
 type Item = {
   image: string;
@@ -169,6 +170,7 @@ const ItemsComponent: React.FC<Props> = ({ items, onBuy }) => {
                 alt={item.name}
                 width="212px"
                 height="212px"
+                loader={myLoader}
               />
             </div>
             <div>

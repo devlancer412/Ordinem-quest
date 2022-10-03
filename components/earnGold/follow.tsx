@@ -8,6 +8,7 @@ import { useQuests } from "hooks/useQuests";
 import { useTwitterUser } from "hooks/useTwitterUser";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { myLoader } from "utils/constants";
 // import { TwitterFollowButton } from "react-twitter-embed";
 import {
   getRandomUser,
@@ -131,8 +132,9 @@ const Follow = () => {
             alt={user.name ?? user.displayName}
             height={200}
             width={200}
+            loader={myLoader}
           />
-          <h1 className="mt-2 text-3xl font-bold">
+          <h1 className="mt-2 text-3xl font-bold text-center">
             {user.name ?? user.displayName}
           </h1>
 
