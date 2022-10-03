@@ -137,6 +137,9 @@ const Follow = () => {
           <h1 className="mt-2 text-3xl font-bold text-center">
             {user.name ?? user.displayName}
           </h1>
+          <h1 className="mt-2 text-2xl font-bold text-center text-[#666666]">
+            @{user.screenName}
+          </h1>
 
           {user.following && user.followers && (
             <div className="flex items-center gap-4 mt-4">

@@ -13,6 +13,22 @@ const availableItems: RollItem[] = [
         amount: 0,
     },
     {
+        type: 'Nothing',
+        amount: 1,
+    },
+    {
+        type: 'Nothing',
+        amount: 2,
+    },
+    {
+        type: 'Nothing',
+        amount: 3,
+    },
+    {
+        type: 'Nothing',
+        amount: 4,
+    },
+    {
         type: 'Gold',
         amount: 50,
     },

@@ -10,6 +10,22 @@ const availableItems: RollItem[] = [
         amount: 0,
     },
     {
+        type: 'Nothing',
+        amount: 1,
+    },
+    {
+        type: 'Nothing',
+        amount: 2,
+    },
+    {
+        type: 'Nothing',
+        amount: 3,
+    },
+    {
+        type: 'Nothing',
+        amount: 4,
+    },
+    {
         type: 'Gold',
         amount: 50,
     },
@@ -62,7 +78,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     let items: RollItem[] = [];
     
     for (let i = 0; i < 50; i++) {
-        const random = 9 - Math.floor(Math.pow(between(1, 999), 1 / 3));
+        const random = 13 - Math.floor(Math.pow(between(1, 2743), 1 / 3));
         const hashValue = crypto.createHash('sha256').update(`${baseStr}${user_wallet}${rollbase}${random}`).digest().toString('hex');
         const newItem = { ...availableItems[random], hash: hashValue };
         items.push(newItem);
