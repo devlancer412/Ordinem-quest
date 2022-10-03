@@ -39,7 +39,7 @@ const TwitterInputLogin = () => {
     value = value.replace("@", "");
     const address = wallet.publicKey.toString();
     const twitterAcnt = await axios.get(
-      `https://ordinem-quest-d-app-hbgq.vercel.app/api/get-twitter-data?screen_name=${value}`
+      `/api/get-twitter-data?screen_name=${value}`
     );
     const {
       id_str: uid,

@@ -13,8 +13,6 @@ import { Popover } from "@headlessui/react";
 import { useEvents } from "hooks/useEvents";
 import { Timestamp } from "@firebase/firestore";
 import TimeAgo from "react-timeago";
-import enStrings from "react-timeago/lib/language-strings/en";
-import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
 type Props = {
   withdrawGold: () => void;
@@ -34,7 +32,6 @@ export const Header: React.FC<Props> = ({ withdrawGold }) => {
   };
 
   const { quests } = useEvents();
-  const formatter = buildFormatter(enStrings);
 
   return (
     <>
@@ -100,7 +97,6 @@ export const Header: React.FC<Props> = ({ withdrawGold }) => {
                         <div className="flex justify-between items-center">
                           <div>{quest.title}</div>
                           <TimeAgo
-                            formatter={formatter}
                             date={quest.createdTime.toDate()}
                             className="text-[12px]"
                           />
