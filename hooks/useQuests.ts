@@ -47,6 +47,6 @@ export const useQuests = create<StateWithMutation>((set) => ({
     set((state) => ({ ...state, tweet_id: payload }));
   },
   setEndedQuotas: (payload) => {
-    set((state) => ({ ...state, ...payload }));
+    set((state) => ({ ...state, quotasEnded: { ...state.quotasEnded, ...payload } }));
   },
 }));

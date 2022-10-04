@@ -33,14 +33,15 @@ export async function getRandomUser(address: string, uid: string, updateFlag: bo
       });
     } else {
       const message = "Follow quota ended for today";
+      setEndedQuotas({
+        follow: true,
+      });
       openAlert({
         message,
         status: "error",
       });
-      setEndedQuotas({
-        follow: true,
-      });
-      throw new Error(message);
+      // throw new Error(message);
+      return;
     }
   }
 
