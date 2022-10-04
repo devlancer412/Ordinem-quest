@@ -1,4 +1,3 @@
-import { fetchAndChangeUser } from "utils/firebase";
 import create from "zustand";
 
 type QuotasEnded = {
@@ -8,7 +7,8 @@ type QuotasEnded = {
 };
 
 type State = {
-  usersToFollow: any[];
+  userToFollow: any;
+  followableUsers: number;
   ordinemUsers: any[];
   indexOfUser: number;
   quotasEnded: QuotasEnded;
@@ -16,15 +16,16 @@ type State = {
 };
 
 interface StateWithMutation extends State {
-  setUsersToFollow: (payload: any[]) => void;
+  setUserToFollow: (payload: any) => void;
+  setFollowableUserCount: (payload: number) => void;
   setOrdinemUsers: (payload: any[]) => void;
-  fetchAndChangeUser: () => Promise<void>;
   setEndedQuotas: (payload: Partial<QuotasEnded>) => void;
   setTweet: (payload: string) => void;
 }
 
 export const useQuests = create<StateWithMutation>((set) => ({
-  usersToFollow: [],
+  userToFollow: {},
+  followableUsers: 0,
   ordinemUsers: [],
   indexOfUser: 0,
   tweet_id: "",
@@ -33,24 +34,17 @@ export const useQuests = create<StateWithMutation>((set) => ({
     comment: false,
     follow: false,
   },
-  setUsersToFollow: (payload) => {
-    set((state) => ({ ...state, usersToFollow: payload }));
+  setUserToFollow: (payload) => {
+    set((state) => ({ ...state, userToFollow: payload }));
+  },
+  setFollowableUserCount: (payload) => {
+    set((state) => ({ ...state, followableUsers: payload }));
   },
   setOrdinemUsers: (payload) => {
     set((state) => ({ ...state, ordinemUsers: payload }));
   },
   setTweet: (payload) => {
     set((state) => ({ ...state, tweet_id: payload }));
-  },
-  fetchAndChangeUser: async () => {
-    const user = await fetchAndChangeUser();
-    set((state) => {
-      state.indexOfUser += 1;
-      const users = state.usersToFollow;
-      users[state.indexOfUser] = user;
-
-      return { ...state, usersToFollow: users };
-    });
   },
   setEndedQuotas: (payload) => {
     set((state) => ({ ...state, ...payload }));

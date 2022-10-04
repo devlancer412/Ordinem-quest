@@ -3,15 +3,15 @@ import { differenceInDays, isYesterday } from "date-fns";
 import { getDocs, query, where } from "firebase/firestore";
 import { useAlert } from "hooks/useAlert";
 import { useQuests } from "hooks/useQuests";
-import { calculateLevels, getCurrentTime } from "utils/constants";
+import { calculateLevels } from "utils/constants";
 import { nftCollection, userCollection } from "./config";
-import { getCurrentUserData, getCurrentUserId, getData, updateUser } from "./utils";
+import { getData, updateUser, updateUserData } from "./utils";
 
-const { setUsersToFollow, setEndedQuotas } = useQuests.getState();
+const { setUserToFollow, setEndedQuotas, setFollowableUserCount } = useQuests.getState();
 
 const { open: openAlert } = useAlert.getState();
 
-export async function getRandomUser(address: string, uid: string) {
+export async function getRandomUser(address: string, uid: string, updateFlag: boolean) {
   const user = getData(
     await getDocs(query(userCollection, where("wallet", "==", address)))
   )[0];
@@ -22,8 +22,6 @@ export async function getRandomUser(address: string, uid: string) {
   const level = calculateLevels(nfts.filter(nft => nft?.twitter === user.screenName).length ?? 1);
   // const today = await getCurrentTime();
   const today = new Date();
-
-  console.log(level, today);
 
   if (user.followCount >= level) {
     if (
@@ -64,40 +62,53 @@ export async function getRandomUser(address: string, uid: string) {
     return;
   }
 
-  let index = Math.ceil(Math.random() * users.length) - 1;
-  users = [...users.splice(index, 1), ...users];
+  let index = (user?.lastFollowIndex ?? -1);
+  if(index < 0 || updateFlag) {
+    index = Math.ceil(Math.random() * users.length) - 1;
+    await updateUserData({
+      lastFollowIndex: index,
+    })
+  }
+  let userToFollow = users.splice(index, 1)[0];
 
   const result = await axios.get(
-    `/api/get-twitter-data?user_id=${users[0]?.uid}`
+    `/api/get-twitter-data?user_id=${userToFollow?.uid}`
   );
-  users[0] = { ...users[0], ...result.data.data };
+  userToFollow = { ...userToFollow, ...result.data.data };
 
-  setUsersToFollow(users);
+  setUserToFollow(userToFollow);
+  setFollowableUserCount(users.length);
 }
 
-export const fetchAndChangeUser = async () => {
-  const { indexOfUser, usersToFollow } = useQuests.getState();
-  const currentUserId = getCurrentUserId();
+// export const fetchAndChangeUser = async () => {
+//   const { indexOfUser, usersToFollow } = useQuests.getState();
+//   const currentUserId = getCurrentUserId();
 
-  const currentUserData = await getCurrentUserData(currentUserId);
-  if (
-    currentUserData.followCount >=
-    calculateLevels(currentUserData.nftCount ?? 1)
-  ) {
-    openAlert({
-      message: "Follow quota exceeds",
-      status: "error",
-    });
-    return;
-  }
+//   const currentUserData = await getCurrentUserData(currentUserId);
+//   const nftCount = (await getNftsFromAddress(currentUserData?.wallet)).length;
+//   if (
+//     currentUserData.followCount >=
+//     calculateLevels(nftCount ?? 1)
+//   ) {
+//     openAlert({
+//       message: "Follow quota exceeds",
+//       status: "error",
+//     });
+//     return;
+//   }
 
-  const user = usersToFollow[indexOfUser + 1];
-  if (!user) return;
+//   const nextFollowIndex = (indexOfUser + 1) % usersToFollow.length;
+//   const user = usersToFollow[nextFollowIndex];
+//   if (!user) return;
 
-  const result = await axios.get(`/api/get-twitter-data?user_id=${user.uid}`);
-  return {
-    ...user,
-    ...result.data.data,
-    image: result.data.data.profile_image_url_https.replace("_normal", ""),
-  };
-};
+//   await updateUserData({
+//     lastFollowIndex: nextFollowIndex,
+//   })
+
+//   const result = await axios.get(`/api/get-twitter-data?user_id=${user.uid}`);
+//   return {
+//     ...user,
+//     ...result.data.data,
+//     image: result.data.data.profile_image_url_https.replace("_normal", ""),
+//   };
+// };

@@ -26,22 +26,21 @@ const Follow = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
-  const { fetchAndChangeUser, usersToFollow, indexOfUser, quotasEnded } =
+  const { userToFollow, quotasEnded, followableUsers } =
     useQuests();
   const wallet = useAnchorWallet();
   const { currentUser } = useTwitterUser();
   const { openNotification } = useNotification();
 
-  const user = usersToFollow[indexOfUser];
-
-  const fetchUsers = async () => {
-    if (!wallet || !currentUser || usersToFollow.length) return;
+  const fetchUsers = async (updateFlag: boolean) => {
+    if (!wallet || !currentUser) return;
 
     setIsLoading(true);
     try {
       await getRandomUser(
         wallet?.publicKey.toString(),
-        currentUser?.providerData[0]?.uid
+        currentUser?.providerData[0]?.uid,
+        updateFlag
       );
     } catch (error) {
       console.log(error);
@@ -51,19 +50,15 @@ const Follow = () => {
 
   useEffect(() => {
     clearTimeout(debounceCallback);
-    debounceCallback = setTimeout(fetchUsers, 1000);
+    debounceCallback = setTimeout(() => fetchUsers(false), 1000);
   }, [wallet]);
-
-  useEffect(() => {
-    setIsVerified(false);
-  }, [indexOfUser]);
 
   const verifyUserFollow = async () => {
     if (!isVerifying) {
       setIsVerifying(true);
       try {
         const result = await axios.get(
-          `/api/get-twitter-followers?user_id=${user.uid}`
+          `/api/get-twitter-followers?user_id=${userToFollow.uid}`
         );
         const currentUserId = currentUser?.providerData[0]?.uid;
         const followId =
@@ -78,7 +73,7 @@ const Follow = () => {
           result.data.data.ids.includes(followId)
         ) {
           setIsVerified(true);
-          await updateUser(user._id, {
+          await updateUser(userToFollow._id, {
             followers: arrayUnion(currentUserId),
           });
           await updateUserData({
@@ -95,6 +90,7 @@ const Follow = () => {
             <SuccessPopup goldRecieved={amount} quest="follow" />
           ));
 
+          
           fetchAndChangeUser();
         }
       } catch (error) {
@@ -104,6 +100,8 @@ const Follow = () => {
       }
     }
   };
+
+  const fetchAndChangeUser = () => fetchUsers(true);
 
   if (!wallet) {
     return <div className="">Connect your wallet</div>;
@@ -119,7 +117,7 @@ const Follow = () => {
       </div>
     );
 
-  if (!user) return null;
+  if (!userToFollow) return null;
 
   return (
     <>
@@ -127,28 +125,28 @@ const Follow = () => {
         <Image src="/follow-border.png" className="w-[100%]" layout="fill" />
         <div className="flex flex-col items-center  my-2  h-full rounded-lg z-10">
           <Image
-            src={user.image}
+            src={userToFollow.image}
             className="rounded-full"
-            alt={user.name ?? user.displayName}
+            alt={userToFollow.name ?? userToFollow.displayName}
             height={200}
             width={200}
             loader={myLoader}
           />
           <h1 className="mt-2 text-3xl font-bold text-center">
-            {user.name ?? user.displayName}
+            {userToFollow.name ?? userToFollow.displayName}
           </h1>
           <h1 className="mt-2 text-2xl font-bold text-center text-[#666666]">
-            @{user.screenName}
+            @{userToFollow.screenName}
           </h1>
 
-          {user.following && user.followers && (
+          {userToFollow.following && userToFollow.followers && (
             <div className="flex items-center gap-4 mt-4">
               <div className="flex flex-col items-center">
-                <h6 className="text-xl">{user?.followers}</h6>
+                <h6 className="text-xl">{userToFollow?.followers}</h6>
                 <h5 className="text-gray-400">Followers</h5>
               </div>
               <div className="flex flex-col items-center">
-                <h6 className="text-xl">{user?.following}</h6>
+                <h6 className="text-xl">{userToFollow?.following}</h6>
                 <h5 className="text-gray-400">Followings</h5>
               </div>
             </div>
@@ -159,7 +157,7 @@ const Follow = () => {
               target="_blank"
               rel="noreferrer"
               href={`https://twitter.com/intent/follow?screen_name=${
-                user.screen_name ?? user.screenName
+                userToFollow.screen_name ?? userToFollow.screenName
               }`}
               className="flex justify-center bg-[#C62828] border-2 border-white text-white px-5 py-2 rounded-lg min-w-[130px] font-semibold"
             >
@@ -181,8 +179,7 @@ const Follow = () => {
             )}
           </div>
 
-          {usersToFollow.length > 0 &&
-            indexOfUser !== usersToFollow.length - 1 && (
+          {followableUsers > 1 && (
               <LoadingButton
                 className="mt-4"
                 text="Skip"
