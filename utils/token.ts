@@ -24,12 +24,14 @@ import {
 import { getNftsFromAddress, getUserFromAddress, updateUser } from "utils/firebase";
 import { increment } from "firebase/firestore";
 import { AnchorWallet, WalletContextState } from "@solana/wallet-adapter-react";
+import { useSolanaNfts } from "hooks/useSolanaNfts";
 
 export const updateTokensToDB = async (to: string, amount: number) => {
   const user = await getUserFromAddress(to);
-  const nftAmount = (await getNftsFromAddress(to)).length;
-  if (nftAmount) {
-    amount += ((nftAmount - 1) * amount) / 10;
+  const { nfts } = useSolanaNfts.getState();
+
+  if (nfts?.length) {
+    amount += ((nfts?.length - 1) * amount) / 10;
   }
 
   updateUser(user._id, {

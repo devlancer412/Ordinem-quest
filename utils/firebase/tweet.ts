@@ -3,10 +3,7 @@ import { getDocs, query, where } from "firebase/firestore";
 import axios from "axios";
 import { differenceInDays, isYesterday } from "date-fns";
 import {
-  getCurrentUserData,
-  getCurrentUserId,
   getData,
-  getNftsFromAddress,
   openAlert,
   updateUser,
   updateUserData,
@@ -89,14 +86,14 @@ export async function getRandomTweet(address: string, uid: string, updateFlag: b
   while (!tweet && retryTime <= 30) {
     retryTime++;
     let index = user?.lastTweetUserIndex ?? -1;
-    if (index < 0 || updateFlag) {
+    if (retryTime > 1 || index < 0 || updateFlag) {
       index = Math.ceil(Math.random() * users.length) - 1;
     }
     const randomUser = users[index];
     const currentUserId = randomUser.uid;
 
     let result: any = {};
-    if (user?.lastTweetIndex && user?.lastTweetIndex >= 0 && !updateFlag) {
+    if (retryTime == 1 && user?.lastTweetIndex && user?.lastTweetIndex >= 0 && !updateFlag) {
       result = await axios.get(
         `/api/get-twitter-random-tweet?user_id=${currentUserId}&tweet_id=${user?.lastTweetIndex}`
       );
@@ -105,6 +102,7 @@ export async function getRandomTweet(address: string, uid: string, updateFlag: b
         `/api/get-twitter-random-tweet?user_id=${currentUserId}`
       );
     }
+    console.dir(result.data, {depth: 3})
     const tweetData = result.data.data;
     if (!tweetData || !tweetData.id_str) {
       continue;
@@ -130,6 +128,7 @@ export async function getRandomTweet(address: string, uid: string, updateFlag: b
     })
 
     tweet = result.data.data;
+    break;
   }
 
   if (retryTime > 30) {
