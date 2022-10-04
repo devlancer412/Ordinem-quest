@@ -96,7 +96,7 @@ export async function getRandomTweet(address: string, uid: string, updateFlag: b
     const currentUserId = randomUser.uid;
 
     let result: any = {};
-    if (user?.lastTweetIndex && user?.lastTweetIndex >= 0) {
+    if (user?.lastTweetIndex && user?.lastTweetIndex >= 0 && !updateFlag) {
       result = await axios.get(
         `/api/get-twitter-random-tweet?user_id=${currentUserId}&tweet_id=${user?.lastTweetIndex}`
       );
