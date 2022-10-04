@@ -5,7 +5,6 @@ import { useNotification } from "hooks/useNotification";
 import { useTwitterUser } from "hooks/useTwitterUser";
 import { useEffect, useState } from "react";
 import {
-  fetchAndChangeTweet,
   getCurrentUserData,
   getRandomTweet,
   updateNftXP,
@@ -18,6 +17,7 @@ import { Tweet as TweetWidget } from "react-twitter-widgets";
 // import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterHashtagButton, TwitterMentionButton, TwitterTweetEmbed, TwitterMomentShare, TwitterDMButton, TwitterVideoEmbed, TwitterOnAirButton } from 'react-twitter-embed';
 import { useQuests } from "hooks/useQuests";
 import Image from "next/image";
+import { PublicKey } from "@solana/web3.js";
 
 const Tweet = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,18 +38,19 @@ const Tweet = () => {
   const { openNotification } = useNotification();
   const { tweet_id, quotasEnded, setTweet } = useQuests();
 
-  const changeTweet = async () => {
+  const changeTweet = async (updateFlag: boolean) => {
     setButtonClicked(true);
-    
-    for(let i=0; i < 30; i++) {
-      const changed = await fetchAndChangeTweet();
-      if (changed) {
-        setIsVerified({ like: false, comment: false, retweet: false });
-        setLoadTweet(true);
-        setButtonClicked(false);
-        setIsTweetLoading(true);
-        return;
-      }
+
+    const changed = await getRandomTweet(
+      (wallet?.publicKey as PublicKey).toString(),
+      (currentUser as UserType)?.providerData[0]?.uid,
+      updateFlag);
+    if (changed) {
+      setIsVerified({ like: false, comment: false, retweet: false });
+      setLoadTweet(true);
+      setButtonClicked(false);
+      setIsTweetLoading(true);
+      return;
     }
 
     setTweet('');
@@ -62,7 +63,8 @@ const Tweet = () => {
         try {
           await getRandomTweet(
             wallet?.publicKey.toString(),
-            currentUser?.providerData[0]?.uid
+            currentUser?.providerData[0]?.uid,
+            false,
           );
         } catch (error) {
           console.log(error);
@@ -74,7 +76,7 @@ const Tweet = () => {
 
   useEffect(() => {
     if (isVerified.like && isVerified.comment) {
-      changeTweet();
+      changeTweet(true);
     }
   }, [isVerified])
 
@@ -259,7 +261,7 @@ const Tweet = () => {
                 className={`${buttonClicked ? "pointer-events-none cursor-not-allowed z-10" : "z-10"
                   }`}
                 text="Skip"
-                onClick={changeTweet}
+                onClick={() => changeTweet(true)}
               />
             </div>
           )}

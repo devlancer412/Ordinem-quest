@@ -6,14 +6,16 @@ import {
   getCurrentUserData,
   getCurrentUserId,
   getData,
+  getNftsFromAddress,
   openAlert,
   updateUser,
+  updateUserData,
 } from "./utils";
 import { nftCollection, userCollection } from "./config";
 import { useQuests } from "hooks/useQuests";
 
 const { setEndedQuotas, setOrdinemUsers, setTweet } = useQuests.getState();
-export async function getRandomTweet(address: string, uid: string) {
+export async function getRandomTweet(address: string, uid: string, updateFlag: boolean) {
   const quotas = {
     like: false,
     comment: false,
@@ -24,7 +26,7 @@ export async function getRandomTweet(address: string, uid: string) {
   let nfts = getData(
     await getDocs(query(nftCollection))
   );
-  
+
   const level = calculateLevels(nfts.filter(nft => nft?.twitter === user.screenName).length ?? 1);
   const today = await getCurrentTime();
 
@@ -74,23 +76,35 @@ export async function getRandomTweet(address: string, uid: string) {
     await getDocs(query(userCollection, where("wallet", "!=", address)))
     // await getDocs(query(userCollection))
   );
-  
+
   users = users.filter((user) => nfts.filter((nft) => nft.twitter == user.screenName).length);
 
   let tweet = null;
 
-  if(!users.length) {
+  if (!users.length) {
     return;
   }
 
-  while (!tweet) {
-    let index = Math.ceil(Math.random() * users.length) - 1;
+  let retryTime = 0;
+  while (!tweet && retryTime <= 30) {
+    retryTime++;
+    let index = user?.lastTweetUserIndex ?? -1;
+    if (index < 0 || updateFlag) {
+      index = Math.ceil(Math.random() * users.length) - 1;
+    }
     const randomUser = users[index];
     const currentUserId = randomUser.uid;
 
-    const result = await axios.get(
-      `/api/get-twitter-random-tweet?user_id=${currentUserId}`
-    );
+    let result: any = {};
+    if (user?.lastTweetIndex && user?.lastTweetIndex >= 0) {
+      result = await axios.get(
+        `/api/get-twitter-random-tweet?user_id=${currentUserId}&tweet_id=${user?.lastTweetIndex}`
+      );
+    } else {
+      result = await axios.get(
+        `/api/get-twitter-random-tweet?user_id=${currentUserId}`
+      );
+    }
     const tweetData = result.data.data;
     if (!tweetData || !tweetData.id_str) {
       continue;
@@ -109,62 +123,75 @@ export async function getRandomTweet(address: string, uid: string) {
       continue;
     }
 
+
+    await updateUserData({
+      lastTweetUserIndex: index,
+      lastTweetIndex: result.data.index,
+    })
+
     tweet = result.data.data;
   }
+
+  if (retryTime > 30) {
+    return false;
+  }
+
   setOrdinemUsers(users);
   setTweet(tweet.id_str);
+  return true;
 }
 
-export const fetchAndChangeTweet = async () => {
-  const { ordinemUsers: users } = useQuests.getState();
+// export const fetchAndChangeTweet = async () => {
+//   const { ordinemUsers: users } = useQuests.getState();
 
-  const index = Math.ceil(Math.random() * users.length) - 1;
-  const _user = users[index];
+//   const index = Math.ceil(Math.random() * users.length) - 1;
+//   const _user = users[index];
 
-  if (!_user) return;
-  const currentUserId = getCurrentUserId();
-  const currentUserData = await getCurrentUserData();
-  const level = calculateLevels(currentUserData.nftCount ?? 1);
-  const quota = {
-    like: false,
-    comment: false,
-  };
-  if (currentUserData.likeCount >= level) {
-    quota.like = true;
-  }
-  if (currentUserData.replyCount >= level) {
-    quota.comment = true;
-  }
-  setEndedQuotas(quota);
-  if (quota.comment && quota.like) return;
+//   if (!_user) return;
+//   const currentUserId = getCurrentUserId();
+//   const currentUserData = await getCurrentUserData();
+//   const nftCount = (await getNftsFromAddress())
+//   const level = calculateLevels(currentUserData.nftCount ?? 1);
+//   const quota = {
+//     like: false,
+//     comment: false,
+//   };
+//   if (currentUserData.likeCount >= level) {
+//     quota.like = true;
+//   }
+//   if (currentUserData.replyCount >= level) {
+//     quota.comment = true;
+//   }
+//   setEndedQuotas(quota);
+//   if (quota.comment && quota.like) return;
 
-  const result = await axios.get(
-    `/api/get-twitter-random-tweet?user_id=${_user.uid}`
-  );
-  const tweetData = result.data.data;
-  if (!tweetData) {
-    return false;
-  }
+//   const result = await axios.get(
+//     `/api/get-twitter-random-tweet?user_id=${_user.uid}`
+//   );
+//   const tweetData = result.data.data;
+//   if (!tweetData) {
+//     return false;
+//   }
 
-  const likeVerify = await axios.get(
-    `/api/verify-like?user_id=${currentUserId}&tweet_id=${tweetData.id_str}`
-  );
-  if (likeVerify.data.data) {
-    false;
-  }
+//   const likeVerify = await axios.get(
+//     `/api/verify-like?user_id=${currentUserId}&tweet_id=${tweetData.id_str}`
+//   );
+//   if (likeVerify.data.data) {
+//     false;
+//   }
 
-  const replyVerify = await axios.get(
-    `/api/verify-reply?user_id=${currentUserId}&tweet_id=${tweetData.id_str}`
-  );
-  if (replyVerify.data.data) {
-    return false;
-  }
+//   const replyVerify = await axios.get(
+//     `/api/verify-reply?user_id=${currentUserId}&tweet_id=${tweetData.id_str}`
+//   );
+//   if (replyVerify.data.data) {
+//     return false;
+//   }
 
-  if (tweetData && tweetData.id_str) {
-    setTweet(tweetData.id_str);
+//   if (tweetData && tweetData.id_str) {
+//     setTweet(tweetData.id_str);
 
-    return true;
-  } else {
-    return false;
-  }
-};
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };

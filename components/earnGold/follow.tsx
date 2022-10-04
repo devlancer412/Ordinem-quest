@@ -101,7 +101,10 @@ const Follow = () => {
     }
   };
 
-  const fetchAndChangeUser = () => fetchUsers(true);
+  const fetchAndChangeUser = async () => {
+    setIsVerified(false);
+    await fetchUsers(true)
+  };
 
   if (!wallet) {
     return <div className="">Connect your wallet</div>;

@@ -28,13 +28,13 @@ import { AnchorWallet, WalletContextState } from "@solana/wallet-adapter-react";
 export const updateTokensToDB = async (to: string, amount: number) => {
   const user = await getUserFromAddress(to);
   const nftAmount = (await getNftsFromAddress(to)).length;
-  if (user.nftCount) {
-    amount += ((user.nftCount - 1) * amount) / 10;
+  if (nftAmount) {
+    amount += ((nftAmount - 1) * amount) / 10;
   }
 
   updateUser(user._id, {
-    tokensEarned: increment(Math.floor(amount * (1 + nftAmount / 10))),
-    tokensWithdrawable: increment(Math.floor(amount * (1 + nftAmount / 10))),
+    tokensEarned: increment(amount),
+    tokensWithdrawable: increment(amount),
   });
 
   return amount;
