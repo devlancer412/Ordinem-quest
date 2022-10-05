@@ -22,21 +22,6 @@ const StyledThumb = styled.div`
   }
 `;
 
-const PriceShow = styled.div`
-  position: absolute;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 16px;
-  padding: 0px 5px;
-  border: 1px solid #cccccc;
-  border-radius: 999px;
-  width: auto;
-  color: white;
-  top: 35px;
-  left: 50%;
-  transform: translate(-50%, 0);
-`;
-
 const StyledTrack = styled.div`
   top: 0;
   bottom: 0;
@@ -61,7 +46,6 @@ const RangeSelect: React.FC<Props> = ({
 }) => {
   const Thumb = (props: any, state: any) => (
     <StyledThumb {...props}>
-      <PriceShow>{state.valueNow}</PriceShow>
     </StyledThumb>
   );
   const Track = (props: any, state: any) => (
