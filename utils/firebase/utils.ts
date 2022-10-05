@@ -58,6 +58,10 @@ export async function updateNFT(nftId: string, payload: any) {
   await updateDoc(doc(db, "nfts", nftId), payload);
 }
 
+export async function updateQuest(questId: string, payload: any) {
+  await updateDoc(doc(db, "quests", questId), payload);
+}
+
 export async function updateUserData(payload: any) {
   const user = await getCurrentUserData();
 

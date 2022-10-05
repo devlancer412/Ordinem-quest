@@ -30,9 +30,15 @@ const deleteOldQuests = async () => {
     ).map((item: any) => item as Quest);
 
     for(const quest of quests) {
-        const deadline = new Date(quest?.deadline);
-        if (deadline < new Date()) {
-            await deleteQuest(quest._id);
+        if(quest?.isPromote) {
+            if((quest.rewarded as number) >= (quest.totalReward as number)) {
+                await deleteQuest(quest._id);
+            }
+        } else {
+            const deadline = new Date(quest.deadline as string);
+            if (deadline < new Date()) {
+                await deleteQuest(quest._id);
+            }
         }
     }
 }

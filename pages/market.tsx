@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { NextPage } from "next";
 import NextImage from "next/image";
@@ -9,6 +10,7 @@ import MysteryBoxModal from "components/modal/MysteryBoxModal";
 import { useModal } from "hooks/useModal";
 import { createTransferCheckedInstruction, getAssociatedTokenAddress } from "@solana/spl-token";
 import { myLoader } from "utils/constants";
+import CreatePromoteEventModal from "components/modal/CreatePromoteEventModal";
 
 type Item = {
   image: string;
@@ -39,6 +41,7 @@ const Market: NextPage = () => {
   const { connection } = useConnection();
   const { setModal } = useModal();
   const { tokens, setTokens } = useSolanaNfts();
+  const [modalMode, setModalMode] = useState<Boolean>(false);
 
   const buyBox = async (item: Item) => {
     if (!wallet.connected) {
@@ -110,8 +113,14 @@ const Market: NextPage = () => {
 
     setTokens(tokens - item.price);
 
+    setModalMode(true);
     setModal(true);
   };
+
+  const newPromoteTweet = () => {
+    setModalMode(false);
+    setModal(true);
+  }
 
   return (
     <>
@@ -125,13 +134,13 @@ const Market: NextPage = () => {
       </div>
       <div className="w-full flex flex-col items-center">
         <div className="w-1/2 bg-gray-500 rounded-[50px] py-7 px-auto bg-[url('/promote.png')] mb-10 min-w-[300px] bg-cover">
-          <h1 className="bg-[#454545B2] py-[10px] rounded-full font-bold text-white text-[20px] leading-[150%] text-center w-[195px] mx-auto">
+          <h1 className="bg-[#454545B2] py-[10px] rounded-full font-bold text-white text-[20px] leading-[150%] text-center w-[195px] mx-auto hover:cursor-pointer" onClick={newPromoteTweet}>
             Promote Tweet
           </h1>
         </div>
         <ItemsComponent items={items} onBuy={buyBox} />
       </div>
-      <MysteryBoxModal />
+      {modalMode ? <MysteryBoxModal /> : <CreatePromoteEventModal />}
     </>
   );
 };

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import {
   getCurrentUserData,
   updateNftXP,
+  updateQuest,
   updateUserData,
 } from "utils/firebase";
 import { updateQuests, deleteQuest } from "utils/firebase/quest";
@@ -65,6 +66,9 @@ const DailyQuest = () => {
         (wallet.publicKey as PublicKey).toString(),
         quest.rewardAmount ?? 5
       );
+      await updateQuest(quest._id, {
+        rewarded: increment(quest.rewardAmount),
+      })
 
       openNotification(() => (
         <SuccessPopup goldRecieved={quest.rewardAmount} quest="follow" />
