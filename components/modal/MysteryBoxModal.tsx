@@ -31,7 +31,7 @@ const MysteryBoxModal = () => {
         (async () => {
             const response = await axios.get(`/api/get-random-mystery-values?user_wallet=${(wallet.publicKey as PublicKey).toBase58()}`);
             setItems(response.data.items);
-            console.log(response.data)
+            // console.log(response.data)
         })();
     }, [wallet, stage]);
 
@@ -66,7 +66,7 @@ const MysteryBoxModal = () => {
 
     return (
         <ModalWrapper>
-            {stage == "Prepare" ? <div className="w-full h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
+            {stage == "Prepare" ? <div className="w-full md:h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
                 <NextImage
                     className="overflow-hidden rounded-lg"
                     src='/market-item.png'
@@ -77,8 +77,8 @@ const MysteryBoxModal = () => {
                 {items.length ? <button className="bg-white text-black rounded-[12px] px-[16px] py-[14px] text-[14px] my-5 w-[120px] font-bold" onClick={() => setStage('Rolling')}>
                     Open Now!
                 </button>:<></>}
-            </div> : stage == "Rolling" ? <div className="w-full h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
-                <div className="w-[70%] flex flex-col items-center bg-[#4D4C4C] rounded-[20px] p-8">
+            </div> : stage == "Rolling" ? <div className="w-full md:h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
+                <div className="w-[90%] md:w-[70%] flex flex-col items-center bg-[#4D4C4C] rounded-[20px] p-8">
                     <RollingSlide items={items} finishedRolling={() => setStage('Result')} />
                     <NextImage
                         className="overflow-hidden"
@@ -91,7 +91,7 @@ const MysteryBoxModal = () => {
                 <button className="bg-white text-black rounded-[12px] px-[16px] py-[14px] text-[14px] my-5 w-[120px] font-bold">
                     Rolling...
                 </button>
-            </div> : <div className="w-full h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
+            </div> : <div className="w-full md:h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
                 <h1 className="w-[80%] text-center text-white text-[36px] leading-[47px]">
                     {items[47].type == 'Nothing' ? 'You won Nothing. Better luck next time!' : 'Congratulations! You won:'}
                 </h1>

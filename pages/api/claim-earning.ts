@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { baseStr } from "utils/constants";
 import crypto from 'crypto';
-import { getUserFromAddress} from "utils/firebase";
+import { getUserFromAddress, updateUser} from "utils/firebase";
 import { increment } from "firebase/firestore";
 import { clusterApiUrl, Connection, Keypair, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { decode } from "bs58";
@@ -86,6 +86,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await getUserFromAddress(user_wallet);
 
     const rollbase = user?.rollbase ?? 0;
+
+    await updateUser(user._id, {
+        rollbase: increment(1)
+    })
 
     let index = 0;
     for (; index < 9; index++) {

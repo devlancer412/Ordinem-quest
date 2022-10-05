@@ -69,11 +69,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const user_wallet = req.body.user_wallet ?? req.query.user_wallet;
     const user = await getUserFromAddress(user_wallet);
 
-    const rollbase = (user?.rollbase ?? 0) + 1;
-
-    updateUser(user._id, {
-        rollbase: increment(1)
-    })
+    const rollbase = (user?.rollbase ?? 0);
 
     let items: RollItem[] = [];
     

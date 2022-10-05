@@ -36,7 +36,7 @@ const RollingSlide: React.FC<Props> = ({ items, finishedRolling }) => {
       <div className='relative'>
         <Slide ref={ref} {...slideProperties}>
           {items.map((each, index) => (
-            <div key={index} className='w-20 flex flex-col justify-center items-center mx-auto'>
+            <div key={index} className='w-10 md:w-20 flex flex-col justify-center items-center mx-auto text-[8px] md:text-[16px]'>
               <img
                 className='w-full rounded-md mx-4 mb-2'
                 key={index}
