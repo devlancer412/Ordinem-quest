@@ -57,9 +57,12 @@ const MysteryBoxModal = () => {
           const txId = await wallet.sendTransaction(tx, connection);
     
           console.log("Transaction sent", txId);
-          await updateUserData({
-            swapedSol: increment(win.amount),
-          })
+
+          if(win.type == 'Sol') {
+            await updateUserData({
+                swapedSol: increment(win.amount),
+            })
+          }
         //   await connection.confirmTransaction(txId, "confirmed");
         } catch (err) {
           console.log(err);
