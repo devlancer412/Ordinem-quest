@@ -26,7 +26,7 @@ const MysteryBoxModal = () => {
             return;
         }
 
-        if(stage != 'Prepare') {
+        if (stage != 'Prepare') {
             return;
         }
 
@@ -39,7 +39,7 @@ const MysteryBoxModal = () => {
 
     const claim = async () => {
         const win = items[47];
-        if(win.type == 'Nothing') {
+        if (win.type == 'Nothing') {
             setStage('Prepare');
             setModal(false);
         }
@@ -47,27 +47,27 @@ const MysteryBoxModal = () => {
         const response = await axios.get(`/api/claim-earning?user_wallet=${(wallet.publicKey as PublicKey).toBase58()}&type=${win.type}&amount=${win.amount}&hash=${win.hash}`);
         // console.log(response.data);
         if (response.data.status != "ok") {
-          console.log(response.data.error);
-          return;
+            console.log(response.data.error);
+            return;
         }
-    
+
         const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
         // console.log(tx);
         try {
-          const txId = await wallet.sendTransaction(tx, connection);
-    
-          console.log("Transaction sent", txId);
+            const txId = await wallet.sendTransaction(tx, connection);
 
-          if(win.type == 'Sol') {
-            await updateUserData({
-                swapedSol: increment(win.amount),
-            })
-          }
-        //   await connection.confirmTransaction(txId, "confirmed");
+            console.log("Transaction sent", txId);
+
+            if (win.type == 'Sol') {
+                await updateUserData({
+                    swapedSol: increment(win.amount),
+                })
+            }
+            //   await connection.confirmTransaction(txId, "confirmed");
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
-        
+
         setStage('Prepare');
         setModal(false);
     }
@@ -84,7 +84,7 @@ const MysteryBoxModal = () => {
                 />
                 {items.length ? <button className="bg-white text-black rounded-[12px] px-[16px] py-[14px] text-[14px] my-5 w-[120px] font-bold" onClick={() => setStage('Rolling')}>
                     Open Now!
-                </button>:<></>}
+                </button> : <></>}
             </div> : stage == "Rolling" ? <div className="w-full md:h-[420px] bg-gradient-to-b from-[#211C1CFF] to-[#000000B2] rounded-[22px] py-[65px] flex flex-col items-center h-full justify-between">
                 <div className="w-[90%] md:w-[70%] flex flex-col items-center bg-[#4D4C4C] rounded-[20px] p-8">
                     <RollingSlide items={items} finishedRolling={() => setStage('Result')} />
@@ -112,7 +112,7 @@ const MysteryBoxModal = () => {
                     <div>{items[47].type == 'Nothing' ? 'Nothing' : `${items[47].amount} ${items[47].type}`}</div>
                 </div>
                 <button className="bg-white text-black rounded-[12px] px-[16px] py-[14px] text-[14px] my-5 w-[120px] font-bold" onClick={claim}>
-                    {items[47].type == 'Nothing' ? 'Close': 'Claim here!'}
+                    {items[47].type == 'Nothing' ? 'Close' : 'Claim here!'}
                 </button>
             </div>}
         </ModalWrapper>
