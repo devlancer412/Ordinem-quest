@@ -10,6 +10,6 @@ export async function signInWithTwitter() {
     provider: "twitter",
   });
 
-  console.log({ user, session, error });
+  // console.log({ user, session, error });
   
 }

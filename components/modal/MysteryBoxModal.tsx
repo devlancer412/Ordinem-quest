@@ -6,7 +6,9 @@ import ModalWrapper from "./ModalWrapper";
 import axios from "axios";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey, Transaction } from "@solana/web3.js";
-import RollingSlide from "components/RollingSlider";
+import RollingSlide from "components/RollingSlider"
+import { updateUserData } from "utils/firebase";
+import { increment } from "firebase/firestore";
 
 const stages = ["Prepare", "Rolling", "Result"] as const;
 type Stage = typeof stages[number];
@@ -43,18 +45,21 @@ const MysteryBoxModal = () => {
         }
 
         const response = await axios.get(`/api/claim-earning?user_wallet=${(wallet.publicKey as PublicKey).toBase58()}&type=${win.type}&amount=${win.amount}&hash=${win.hash}`);
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data.status != "ok") {
           console.log(response.data.error);
           return;
         }
     
         const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
-        console.log(tx);
+        // console.log(tx);
         try {
           const txId = await wallet.sendTransaction(tx, connection);
     
           console.log("Transaction sent", txId);
+          await updateUserData({
+            swapedSol: increment(win.amount),
+          })
         //   await connection.confirmTransaction(txId, "confirmed");
         } catch (err) {
           console.log(err);

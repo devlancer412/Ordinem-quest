@@ -33,7 +33,7 @@ export const useSolanaNfts = create<StateWithMutation>((set) => ({
     set((state) => ({ ...state, tokens }));
   },
   searchNfts: (payload) => {
-    console.log(payload);
+    // console.log(payload);
     set((state) => ({
       ...state,
       nfts: payload.length

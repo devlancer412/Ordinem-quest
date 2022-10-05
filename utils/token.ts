@@ -63,13 +63,13 @@ export const sendTokensToUser = async (
   // Get the token account of the fromWallet address, and if it does not exist, create it
   const mintInfo = await getMint(connection, destMint);
 
-  console.log(mintInfo.mintAuthority?.toString());
+  // console.log(mintInfo.mintAuthority?.toString());
 
   let ata = await getAssociatedTokenAddress(
     destMint, // mint
     toWallet.publicKey! // owner
   );
-  console.log(ata.toString());
+  // console.log(ata.toString());
   // return;
 
   let tx = new Transaction().add(
@@ -103,7 +103,7 @@ export const sendTokensToUser = async (
   //   lastValidBlockHeight: hash.lastValidBlockHeight,
   //   blockhash: hash.blockhash,
   // });
-  console.log(signed);
+  // console.log(signed);
   return signed;
   const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
@@ -197,7 +197,7 @@ export const mintTokensToUser = async (
     lastValidBlockHeight: hash.lastValidBlockHeight,
     signature,
   });
-  console.log(result);
+  // console.log(result);
 
   return signature;
 };

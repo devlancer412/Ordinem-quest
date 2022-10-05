@@ -19,7 +19,7 @@ const GlobalState = () => {
     })();
   }, []);
 
-  console.log(users);
+  // console.log(users);
 
   return (
     <div className="global-state w-full h-full py-[23px]">

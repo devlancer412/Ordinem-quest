@@ -66,7 +66,7 @@ const Follow = () => {
             ? Math.floor(Number(currentUserId) / 100) * 100
             : Number(currentUserId);
 
-        console.log(followId, result.data.data.ids);
+        // console.log(followId, result.data.data.ids);
         if (
           result.data.data &&
           result.data.data.ids &&

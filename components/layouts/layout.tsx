@@ -104,7 +104,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
       ).toBase58()}`
     );
 
-    console.log(response.data);
+    // console.log(response.data);
     if (response.data.status != "ok") {
       console.log(response.data.error);
       return;
@@ -112,7 +112,7 @@ export const Layout: React.FC<Props> = ({ children }) => {
 
     setTokens(0);
     const tx = Transaction.from(Buffer.from(response.data.data, "base64"));
-    console.log(tx);
+    // console.log(tx);
     try {
       const txId = await wallet.sendTransaction(tx, connection);
 

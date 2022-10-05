@@ -48,13 +48,13 @@ const DailyQuest = () => {
     const tweetId = quest.link
       .split("/")
       [quest.link.split("/").length - 1].split("?")[0];
-    console.log(tweetId);
+    // console.log(tweetId);
     const result = await axios.get(
       `/api/verify-quest?user_id=${user.uid}&tweet_id=${tweetId}`
     );
 
     if (result?.data?.data == true) {
-      console.log("verified");
+      // console.log("verified");
       await updateUserData({
         quests: arrayUnion(quest?._id),
         questCount: increment(1),

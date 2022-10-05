@@ -25,7 +25,7 @@ export async function signInWithTwitterFirebase(address?: string) {
   try {
     const result = await signInWithPopup(auth, provider);
     const credential = TwitterAuthProvider.credentialFromResult(result);
-    console.log(credential);
+    // console.log(credential);
     const user = result.user;
 
     const userWithAddress = getData(

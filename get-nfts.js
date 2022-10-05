@@ -59,7 +59,7 @@ async function randomUserFunc() {
 }
 
 function logUser(users) {
-  console.log(users.map((user) => user.uid));
+  // console.log(users.map((user) => user.uid));
 }
 
 async function getallUsers() {
@@ -74,8 +74,8 @@ async function getallUsers() {
   }
 
   const values = Object.keys(available).filter((key, i) => available[key] > 1)
-  console.log(
-    values, values.length
-  );
+  // console.log(
+  //   values, values.length
+  // );
 }
 getallUsers();
