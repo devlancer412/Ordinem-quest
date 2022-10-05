@@ -55,7 +55,7 @@ const MysteryBoxModal = () => {
           const txId = await wallet.sendTransaction(tx, connection);
     
           console.log("Transaction sent", txId);
-          await connection.confirmTransaction(txId, "confirmed");
+        //   await connection.confirmTransaction(txId, "confirmed");
         } catch (err) {
           console.log(err);
         }
